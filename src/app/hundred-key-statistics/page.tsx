@@ -1,4 +1,4 @@
-import useHundredKeyStatistics from '@/hooks/useHundredKeyStatistics';
+import useHundredKeyStatistics from '@/app/hundred-key-statistics/hooks/useHundredKeyStatistics';
 
 const HundredKeyStatisticsPage = async () => {
 	const statistics = await useHundredKeyStatistics();
