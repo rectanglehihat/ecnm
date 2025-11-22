@@ -9,7 +9,8 @@ const InflationPage = async () => {
 				<header className="flex flex-col gap-2">
 					<h1 className="text-2xl font-semibold tracking-tight">물가</h1>
 					<p className="text-sm text-zinc-600 dark:text-zinc-400">
-						한국은행 ECOS Open API의 통계 세부항목 목록을 불러온 예시입니다.
+						한국은행 ECOS Open API의 통계조회 조건 설정(StatisticSearch)을 사용하여 소비자물가지수의 쌀 항목을 검색한
+						결과입니다.
 					</p>
 				</header>
 
@@ -22,23 +23,14 @@ const InflationPage = async () => {
 						<ul className="divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
 							{statistics.map((item) => (
 								<li
-									key={`${item.CYCLE}-${item.ITEM_CODE}`}
+									key={`${item.ITEM_NAME1}-${item.TIME}`}
 									className="flex flex-col gap-1 py-3"
 								>
 									<div className="flex items-center justify-between gap-2">
-										<div className="font-medium">{item.ITEM_NAME}</div>
-										<span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
-											{item.DATA_CNT}건
-										</span>
+										<div className="font-medium">{item.DATA_VALUE}</div>
 									</div>
-									<div className="flex items-center gap-2">
-										<div className="text-xs text-zinc-500 dark:text-zinc-400">항목코드: {item.ITEM_CODE}</div>
-										{item.ITEM_NAME && (
-											<>
-												<span className="text-zinc-400 dark:text-zinc-600">·</span>
-												<div className="text-xs text-zinc-500 dark:text-zinc-400">{item.ITEM_CODE}</div>
-											</>
-										)}
+									<div className="flex items-center gap-2 flex-wrap">
+										<div className="text-xs text-zinc-500 dark:text-zinc-400">년도: {item.TIME}</div>
 									</div>
 								</li>
 							))}
