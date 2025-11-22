@@ -18,10 +18,10 @@ export default function Home() {
 						100대 통계지표
 					</Link>
 					<Link
-						href="/2023"
+						href="/inflation"
 						className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
 					>
-						통계 2023
+						물가
 					</Link>
 				</div>
 			</main>
