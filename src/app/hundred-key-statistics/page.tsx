@@ -1,48 +1,7 @@
-type KeyStatisticItem = {
-	CLASS_NAME: string;
-	CYCLE: string;
-	DATA_VALUE: string;
-	KEYSTAT_NAME: string;
-	UNIT_NAME: string;
-};
+import useHundredKeyStatistics from '@/hooks/useHundredKeyStatistics';
 
-type KeyStatisticResponse = {
-	KeyStatisticList: {
-		list_total_count: number;
-		row: KeyStatisticItem[];
-		row_count: number;
-	};
-};
-
-async function fetchKeyStatistics(): Promise<KeyStatisticItem[]> {
-	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
-
-	if (!apiKey) {
-		console.error('BOK_API_KEY 환경 변수가 설정되어 있지 않습니다.');
-		return [];
-	}
-
-	const url = `https://ecos.bok.or.kr/api/KeyStatisticList/${apiKey}/json/kr/1/10`;
-
-	const res = await fetch(url, { cache: 'no-store' });
-
-	if (!res.ok) {
-		console.error('한국은행 Open API 호출 실패', res.status, res.statusText);
-		return [];
-	}
-
-	const data = (await res.json()) as KeyStatisticResponse;
-	console.log('❤️ data', data);
-
-	if (!data.KeyStatisticList?.row) {
-		return [];
-	}
-
-	return data.KeyStatisticList.row ?? [];
-}
-
-const Page = async () => {
-	const statistics = await fetchKeyStatistics();
+const HundredKeyStatisticsPage = async () => {
+	const statistics = await useHundredKeyStatistics();
 
 	return (
 		<div className="min-h-screen bg-zinc-50 dark:bg-black text-black dark:text-zinc-50">
@@ -50,7 +9,7 @@ const Page = async () => {
 				<header className="flex flex-col gap-2">
 					<h1 className="text-2xl font-semibold tracking-tight">2024년 100대 통계지표</h1>
 					<p className="text-sm text-zinc-600 dark:text-zinc-400">
-						한국은행 ECOS Open API의 100대 통계지표(`KeyStatisticList`)를 불러온 예시입니다.
+						한국은행 ECOS Open API의 100대 통계지표를 불러온 예시입니다.
 					</p>
 				</header>
 
@@ -85,4 +44,4 @@ const Page = async () => {
 	);
 };
 
-export default Page;
+export default HundredKeyStatisticsPage;

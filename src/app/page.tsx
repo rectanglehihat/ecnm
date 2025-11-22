@@ -12,10 +12,10 @@ export default function Home() {
 				</div>
 				<div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
 					<Link
-						href="/2024"
+						href="/hundred-key-statistics"
 						className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
 					>
-						통계 2024
+						100대 통계지표
 					</Link>
 					<Link
 						href="/2023"
