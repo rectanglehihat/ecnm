@@ -18,6 +18,11 @@ const useHundredKeyStatistics = async (): Promise<KeyStatisticItem[]> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
+	if (!apiKey || !baseUrl) {
+		console.error('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.');
+		return [];
+	}
+
 	const url = `${baseUrl}/KeyStatisticList/${apiKey}/json/kr/1/10`;
 	const res = await fetch(url, { cache: 'no-store' });
 
