@@ -1,5 +1,5 @@
 import useInflationStatistics from '@/app/inflation/hooks/useInflationStatistics';
-import InflationChart from '@/app/hundred-key-statistics/components/InflationChart';
+import InflationChart from '@/app/inflation/components/InflationChart';
 
 const InflationPage = async () => {
 	const riceStats = await useInflationStatistics('A01101');
@@ -15,7 +15,7 @@ const InflationPage = async () => {
 						<ul>
 							<li>기준연도: 2020년</li>
 							<li>지수: 기준연도의 가격 수준을 100으로 고정</li>
-							<li>다른 시점의 CPI가 100보다 높으면 기준연도보다 평균 물가가 올랐다는 뜻</li>
+							<li>다른 시점의 CPI가 100보다 높으면 기준연도보다 평균 물가가 높다는 뜻</li>
 							<li>다른 시점의 CPI가 100보다 낮으면 기준연도보다 평균 물가가 낮다는 뜻</li>
 						</ul>
 					</section>
