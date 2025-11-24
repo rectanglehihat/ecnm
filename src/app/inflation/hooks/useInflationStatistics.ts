@@ -31,11 +31,11 @@ type StatisticSearchResponse = {
  * @param itemCode1 아이템코드1 (예: A01101 - 쌀)
  */
 const useInflationStatistics = async (
+	itemCode1: string = 'A01101',
 	statCode: string = '901Y009',
 	cycle: string = 'A',
 	startTime: string = '1950',
 	endTime: string = '2024',
-	itemCode1: string = 'A01101',
 ): Promise<StatisticSearchItem[]> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
@@ -45,7 +45,7 @@ const useInflationStatistics = async (
 		return [];
 	}
 
-	const url = `${baseUrl}/StatisticSearch/${apiKey}/json/kr/1/10/${statCode}/${cycle}/${startTime}/${endTime}/${itemCode1}`;
+	const url = `${baseUrl}/StatisticSearch/${apiKey}/json/kr/1/100/${statCode}/${cycle}/${startTime}/${endTime}/${itemCode1}`;
 	const res = await fetch(url, { cache: 'no-store' });
 
 	if (!res.ok) {
