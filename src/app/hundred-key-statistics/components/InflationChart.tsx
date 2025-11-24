@@ -91,14 +91,7 @@ const InflationChart = ({ data }: InflationChartProps) => {
 						dot={{ r: 4 }}
 						activeDot={{ r: 6 }}
 						name={itemName}
-					>
-						<LabelList
-							dataKey="value"
-							position="top"
-							className="fill-zinc-700 dark:fill-zinc-300"
-							style={{ fontSize: '12px', fontWeight: 500 }}
-						/>
-					</Line>
+					></Line>
 				</LineChart>
 			</ResponsiveContainer>
 		</div>

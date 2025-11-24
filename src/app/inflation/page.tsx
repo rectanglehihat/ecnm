@@ -2,16 +2,23 @@ import useInflationStatistics from '@/app/inflation/hooks/useInflationStatistics
 import InflationChart from '@/app/hundred-key-statistics/components/InflationChart';
 
 const InflationPage = async () => {
-	const riceStats = await useInflationStatistics();
+	const riceStats = await useInflationStatistics('A01101');
+	const brownRiceStats = await useInflationStatistics('A01102');
 
 	return (
 		<div className="min-h-screen bg-zinc-50 dark:bg-black text-black dark:text-zinc-50">
-			<main className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-10">
-				<header className="flex flex-col gap-2">
+			<main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
+				<header className="flex flex-col gap-4">
 					<h1 className="text-2xl font-semibold tracking-tight">물가</h1>
-					<p className="text-sm text-zinc-600 dark:text-zinc-400">
-						한국은행 ECOS Open API의 통계조회 조건 설정을 사용하여 소비자물가지수의 쌀 항목을 검색한 결과입니다.
-					</p>
+					<section className="text-sm text-zinc-700 flex flex-col gap-2">
+						<p className="font-semibold">🍎 2020=100 이란?</p>
+						<ul>
+							<li>기준연도: 2020년</li>
+							<li>지수: 기준연도의 가격 수준을 100으로 고정</li>
+							<li>다른 시점의 CPI가 100보다 높으면 기준연도보다 평균 물가가 올랐다는 뜻</li>
+							<li>다른 시점의 CPI가 100보다 낮으면 기준연도보다 평균 물가가 낮다는 뜻</li>
+						</ul>
+					</section>
 				</header>
 
 				{riceStats.length > 0 && (
