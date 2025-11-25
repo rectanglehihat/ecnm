@@ -10,7 +10,7 @@ type StatisticItem = {
 	UNIT_NAME: string;
 };
 
-type InflationChartProps = {
+type GrainChartProps = {
 	data: StatisticItem[];
 	brownRiceData?: StatisticItem[];
 	glutinousRiceData?: StatisticItem[];
@@ -20,7 +20,7 @@ type InflationChartProps = {
 	flourData?: StatisticItem[];
 };
 
-const InflationChart = ({
+const GrainChart = ({
 	data,
 	brownRiceData,
 	glutinousRiceData,
@@ -28,7 +28,7 @@ const InflationChart = ({
 	beanData,
 	peanutData,
 	flourData,
-}: InflationChartProps) => {
+}: GrainChartProps) => {
 	// 모든 데이터셋을 처리하는 함수
 	const processDataset = (dataset: StatisticItem[], key: string) => {
 		return dataset
@@ -141,4 +141,4 @@ const InflationChart = ({
 	);
 };
 
-export default InflationChart;
+export default GrainChart;

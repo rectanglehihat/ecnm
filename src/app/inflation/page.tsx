@@ -1,5 +1,5 @@
 import useInflationStatistics from '@/app/inflation/hooks/useInflationStatistics';
-import InflationChart from '@/app/inflation/components/InflationChart';
+import GrainChart from '@/app/inflation/components/GrainChart';
 
 const InflationPage = async () => {
 	const riceStats = await useInflationStatistics('A01101');
@@ -29,7 +29,7 @@ const InflationPage = async () => {
 				{riceStats.length > 0 && (
 					<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
 						<h2 className="text-lg font-semibold mb-4">곡물</h2>
-						<InflationChart
+						<GrainChart
 							data={riceStats}
 							brownRiceData={brownRiceStats}
 							glutinousRiceData={glutinousRiceStats}
