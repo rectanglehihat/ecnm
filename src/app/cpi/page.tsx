@@ -3,7 +3,6 @@ import GrainChart from '@/app/cpi/components/GrainChart';
 
 const CpiPage = async () => {
 	const grainItemCodes = ['A01101', 'A01102', 'A01103', 'A01104', 'A01105', 'A01106', 'A01108'];
-
 	const grainStats = await useCpiStatistics(grainItemCodes);
 
 	return (
