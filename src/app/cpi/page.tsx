@@ -1,16 +1,14 @@
-import useCpiStatistics from '@/app/cpi/hooks/useCpiStatistics';
-import GrainChart from '@/app/cpi/components/GrainChart';
+import { Suspense } from 'react';
+import GrainSection from '@/app/cpi/components/GrainSection';
+import ChartSkeleton from '@/components/charts/ChartSkeleton';
 
-const CpiPage = async () => {
-	const grainItemCodes = ['A01101', 'A01102', 'A01103', 'A01104', 'A01105', 'A01106', 'A01108'];
-	const grainStats = await useCpiStatistics(grainItemCodes);
-
+const CpiPage = () => {
 	return (
 		<div className="min-h-screen bg-zinc-50 dark:bg-black text-black dark:text-zinc-50">
 			<main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
 				<header className="flex flex-col gap-4">
 					<h1 className="text-2xl font-semibold tracking-tight">소비자물가지수(CPI)</h1>
-					<section className="text-sm text-zinc-700 flex flex-col gap-2">
+					<section className="text-sm text-zinc-700 dark:text-zinc-300 flex flex-col gap-2">
 						<p className="font-semibold">🍎 2020=100 이란?</p>
 						<ul>
 							<li>기준연도: 2020년</li>
@@ -21,12 +19,16 @@ const CpiPage = async () => {
 					</section>
 				</header>
 
-				{Object.keys(grainStats).length > 0 && (
-					<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-						<h2 className="text-lg font-semibold mb-4">곡물</h2>
-						<GrainChart data={grainStats} />
-					</section>
-				)}
+				<Suspense
+					fallback={
+						<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+							<h2 className="text-lg font-semibold mb-4">곡물</h2>
+							<ChartSkeleton />
+						</section>
+					}
+				>
+					<GrainSection />
+				</Suspense>
 			</main>
 		</div>
 	);
