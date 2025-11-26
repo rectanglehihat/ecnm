@@ -26,9 +26,7 @@ type StatisticSearchResponse = {
  * 한국은행 Open API의 통계조회 조건 설정 API를 사용하여 통계 항목을 검색합니다.
  * @param itemCodes 통계항목코드 배열 또는 단일 코드
  */
-const useCpiStatistics = async (
-	itemCodes: string[] | string = ['A01101'],
-): Promise<Record<string, StatisticSearchItem[]>> => {
+const useCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Record<string, StatisticSearchItem[]>> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
@@ -42,31 +40,43 @@ const useCpiStatistics = async (
 		return {};
 	}
 
-	// 단일 문자열인 경우 배열로 변환
-	const codes = Array.isArray(itemCodes) ? itemCodes : [itemCodes];
 	const result: Record<string, StatisticSearchItem[]> = {};
 
-	// 각 itemCode에 대해 API 호출
-	for (const itemCode of codes) {
+	// Promise.allSettled를 사용하여 모든 API를 병렬로 호출
+	const promises = itemCodes.map(async (itemCode) => {
 		try {
 			const url = `${baseUrl}/StatisticSearch/${apiKey}/json/kr/1/100/${statCode}/${cycle}/${startTime}/${endTime}/${itemCode}`;
 			const res = await fetch(url, { cache: 'no-store', next: { revalidate: 3600 } });
 
 			if (!res.ok) {
 				console.error(`한국은행 Open API 호출 실패 (${itemCode})`, res.status, res.statusText);
-				result[itemCode] = [];
-				continue;
+				return { itemCode, data: [] };
 			}
 
 			const data = (await res.json()) as StatisticSearchResponse;
 			console.log(`🌼 StatisticSearch data for ${itemCode}`, data);
 
-			result[itemCode] = data.StatisticSearch?.row ?? [];
+			return { itemCode, data: data.StatisticSearch?.row ?? [] };
 		} catch (error) {
 			console.error(`API 호출 중 오류 발생 (${itemCode}):`, error);
+			return { itemCode, data: [] };
+		}
+	});
+
+	// 모든 요청이 완료될 때까지 대기
+	const results = await Promise.allSettled(promises);
+
+	// 결과를 처리하여 result 객체에 저장
+	results.forEach((promiseResult, index) => {
+		const itemCode = itemCodes[index];
+
+		if (promiseResult.status === 'fulfilled') {
+			result[itemCode] = promiseResult.value.data;
+		} else {
+			console.error(`Promise rejected for ${itemCode}:`, promiseResult.reason);
 			result[itemCode] = [];
 		}
-	}
+	});
 
 	return result;
 };
