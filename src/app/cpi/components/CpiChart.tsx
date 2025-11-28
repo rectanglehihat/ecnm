@@ -2,6 +2,7 @@
 
 import { LineChart } from '@/components/charts';
 import type { LineConfig, ChartDataPoint } from '@/components/charts';
+import { ITEM_CODE_MAPPING } from '@/const/chartColors';
 
 type StatisticItem = {
 	DATA_VALUE: string;
@@ -10,22 +11,13 @@ type StatisticItem = {
 	UNIT_NAME: string;
 };
 
-type GrainChartProps = {
+type CpiChartProps = {
 	data: Record<string, StatisticItem[]>;
+	emptyMessage?: string;
+	height?: string;
 };
 
-const GrainChart = ({ data }: GrainChartProps) => {
-	// 아이템 코드와 키 매핑
-	const itemCodeMapping: Record<string, { key: string; color: string }> = {
-		A01101: { key: 'rice', color: 'rgb(59, 130, 246)' },
-		A01102: { key: 'brownRice', color: 'rgb(34, 197, 94)' },
-		A01103: { key: 'glutinousRice', color: 'rgb(168, 85, 247)' },
-		A01104: { key: 'barleyRice', color: 'rgb(245, 101, 101)' },
-		A01105: { key: 'bean', color: 'rgb(251, 191, 36)' },
-		A01106: { key: 'peanut', color: 'rgb(14, 165, 233)' },
-		A01108: { key: 'flour', color: 'rgb(139, 69, 19)' },
-	};
-
+const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.', height = '24rem' }: CpiChartProps) => {
 	// 모든 연도를 수집
 	const allYears = new Set<string>();
 	Object.values(data).forEach((dataset) => {
@@ -38,7 +30,7 @@ const GrainChart = ({ data }: GrainChartProps) => {
 		const yearData: any = { year };
 
 		Object.entries(data).forEach(([itemCode, dataset]) => {
-			const mapping = itemCodeMapping[itemCode];
+			const mapping = ITEM_CODE_MAPPING[itemCode as keyof typeof ITEM_CODE_MAPPING];
 			if (mapping) {
 				const item = dataset.find((d) => d.TIME === year);
 				yearData[mapping.key] = item ? parseFloat(item.DATA_VALUE) || 0 : null;
@@ -51,7 +43,7 @@ const GrainChart = ({ data }: GrainChartProps) => {
 	// 라인 구성 설정
 	const lines: LineConfig[] = [];
 	Object.entries(data).forEach(([itemCode, dataset]) => {
-		const mapping = itemCodeMapping[itemCode];
+		const mapping = ITEM_CODE_MAPPING[itemCode as keyof typeof ITEM_CODE_MAPPING];
 		if (mapping && dataset.length > 0) {
 			lines.push({
 				dataKey: mapping.key,
@@ -70,10 +62,10 @@ const GrainChart = ({ data }: GrainChartProps) => {
 			lines={lines}
 			xAxisKey="year"
 			yAxisLabel={unitName}
-			height="24rem"
-			emptyMessage="표시할 데이터가 없습니다."
+			height={height}
+			emptyMessage={emptyMessage}
 		/>
 	);
 };
 
-export default GrainChart;
+export default CpiChart;
