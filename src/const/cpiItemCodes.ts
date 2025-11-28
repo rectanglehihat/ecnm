@@ -11,3 +11,4 @@ export const NOODLE_ITEM_CODES = [
 	'A01115',
 	'A01116',
 ] as const;
+export const MEAT_ITEM_CODES = ['A01201', 'A01202', 'A01203', 'A01204', 'A01205', 'A01206', 'A01207'] as const;
