@@ -14,7 +14,7 @@ export const CHART_COLORS = [
 
 // 아이템 코드별 매핑 정보 (색상은 순서대로 할당)
 export const ITEM_CODE_MAPPING = {
-	// 곡류 (0-6번 색상 사용)
+	// 곡류
 	A01101: { key: 'rice' as const, color: CHART_COLORS[0] },
 	A01102: { key: 'brownRice' as const, color: CHART_COLORS[1] },
 	A01103: { key: 'glutinousRice' as const, color: CHART_COLORS[2] },
@@ -23,7 +23,7 @@ export const ITEM_CODE_MAPPING = {
 	A01106: { key: 'peanut' as const, color: CHART_COLORS[5] },
 	A01108: { key: 'flour' as const, color: CHART_COLORS[6] },
 
-	// 면류 (0-7번 색상 사용)
+	// 면류
 	A01109: { key: 'noodles' as const, color: CHART_COLORS[0] },
 	A01110: { key: 'instantNoodles' as const, color: CHART_COLORS[1] },
 	A01111: { key: 'glassNoodles' as const, color: CHART_COLORS[2] },
@@ -32,4 +32,13 @@ export const ITEM_CODE_MAPPING = {
 	A01114: { key: 'pancakePowder' as const, color: CHART_COLORS[8] },
 	A01115: { key: 'cake' as const, color: CHART_COLORS[3] },
 	A01116: { key: 'bread' as const, color: CHART_COLORS[4] },
+
+	// 육류
+	A01201: { key: 'domesticBeef' as const, color: CHART_COLORS[0] },
+	A01202: { key: 'importedBeef' as const, color: CHART_COLORS[1] },
+	A01203: { key: 'pork' as const, color: CHART_COLORS[2] },
+	A01204: { key: 'chicken' as const, color: CHART_COLORS[3] },
+	A01205: { key: 'sausage' as const, color: CHART_COLORS[4] },
+	A01206: { key: 'hamBacon' as const, color: CHART_COLORS[5] },
+	A01207: { key: 'otherProcessedMeat' as const, color: CHART_COLORS[6] },
 } as const;
