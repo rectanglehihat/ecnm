@@ -138,9 +138,23 @@ const LineChart = ({
 							contentStyle={{
 								backgroundColor: 'var(--tw-color-zinc-900)',
 								border: 'none',
-								fontWeight: 'semi-bold',
+								borderRadius: '6px',
+								fontSize: '12px',
+								padding: '8px',
+								minWidth: 'auto',
+								boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
 							}}
-							labelStyle={{ color: 'var(--tw-color-zinc-50)' }}
+							labelStyle={{
+								color: 'var(--tw-color-zinc-50)',
+								fontSize: '14px',
+								fontWeight: '600',
+								marginBottom: '2px',
+							}}
+							itemStyle={{
+								fontSize: '12px',
+								fontWeight: '600',
+								padding: '1px 0',
+							}}
 						/>
 					)}
 					{showLegend && <Legend />}
