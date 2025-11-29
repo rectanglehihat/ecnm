@@ -2,6 +2,8 @@ import { Suspense } from 'react';
 import GrainSection from '@/app/cpi/components/GrainSection';
 import NoodleSection from '@/app/cpi/components/NoodleSection';
 import MeatSection from '@/app/cpi/components/MeatSection';
+import FishSection from '@/app/cpi/components/FishSection';
+import SeafoodSection from '@/app/cpi/components/SeafoodSection';
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 
 const CpiPage = () => {
@@ -52,6 +54,28 @@ const CpiPage = () => {
 					}
 				>
 					<MeatSection />
+				</Suspense>
+
+				<Suspense
+					fallback={
+						<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+							<h2 className="text-lg font-semibold mb-4">어류</h2>
+							<ChartSkeleton />
+						</section>
+					}
+				>
+					<FishSection />
+				</Suspense>
+
+				<Suspense
+					fallback={
+						<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+							<h2 className="text-lg font-semibold mb-4">수산물 및 가공품</h2>
+							<ChartSkeleton />
+						</section>
+					}
+				>
+					<SeafoodSection />
 				</Suspense>
 			</main>
 		</div>
