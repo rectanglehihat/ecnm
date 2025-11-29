@@ -12,3 +12,19 @@ export const NOODLE_ITEM_CODES = [
 	'A01116',
 ] as const;
 export const MEAT_ITEM_CODES = ['A01201', 'A01202', 'A01203', 'A01204', 'A01205', 'A01206', 'A01207'] as const;
+export const FISH_ITEM_CODES = ['A01301', 'A01302', 'A01303', 'A01304', 'A01305', 'A01313'] as const;
+export const SEAFOOD_ITEM_CODES = [
+	'A01306',
+	'A01307',
+	'A01308',
+	'A01309',
+	'A01310',
+	'A01311',
+	'A01312',
+	'A01314',
+	'A01315',
+	'A01316',
+	'A01317',
+	'A01318',
+	'A01319',
+] as const;
