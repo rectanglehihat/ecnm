@@ -28,3 +28,5 @@ export const SEAFOOD_ITEM_CODES = [
 	'A01318',
 	'A01319',
 ] as const;
+export const DAIRY_EGGS_ITEM_CODES = ['A01401', 'A01402', 'A01403', 'A01404', 'A01405'] as const;
+export const OIL_ITEM_CODES = ['A01501', 'A01502'] as const;

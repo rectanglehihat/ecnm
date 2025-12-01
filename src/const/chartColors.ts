@@ -74,4 +74,15 @@ export const ITEM_CODE_MAPPING = {
 	A01317: { key: 'crabStick' as const, color: CHART_COLORS[10] },
 	A01318: { key: 'cannedSeafood' as const, color: CHART_COLORS[11] },
 	A01319: { key: 'saltedSeafood' as const, color: CHART_COLORS[12] },
+
+	// 우유, 치즈 및 계란
+	A01401: { key: 'milk' as const, color: CHART_COLORS[0] },
+	A01402: { key: 'babyFormula' as const, color: CHART_COLORS[1] },
+	A01403: { key: 'cheese' as const, color: CHART_COLORS[2] },
+	A01404: { key: 'fermentedMilk' as const, color: CHART_COLORS[3] },
+	A01405: { key: 'egg' as const, color: CHART_COLORS[4] },
+
+	// 식용유지
+	A01501: { key: 'sesameOil' as const, color: CHART_COLORS[0] },
+	A01502: { key: 'cookingOil' as const, color: CHART_COLORS[1] },
 } as const;

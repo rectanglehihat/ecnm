@@ -5,6 +5,8 @@ import MeatSection from '@/app/cpi/components/MeatSection';
 import FishSection from '@/app/cpi/components/FishSection';
 import SeafoodSection from '@/app/cpi/components/SeafoodSection';
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
+import DairySection from '@/app/cpi/components/DairySection';
+import OilSection from '@/app/cpi/components/OilSection';
 
 const CpiPage = () => {
 	return (
@@ -76,6 +78,28 @@ const CpiPage = () => {
 					}
 				>
 					<SeafoodSection />
+				</Suspense>
+
+				<Suspense
+					fallback={
+						<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+							<h2 className="text-lg font-semibold mb-4">우유 · 치즈 및 계란</h2>
+							<ChartSkeleton />
+						</section>
+					}
+				>
+					<DairySection />
+				</Suspense>
+
+				<Suspense
+					fallback={
+						<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+							<h2 className="text-lg font-semibold mb-4">식용유지</h2>
+							<ChartSkeleton />
+						</section>
+					}
+				>
+					<OilSection />
 				</Suspense>
 			</main>
 		</div>
