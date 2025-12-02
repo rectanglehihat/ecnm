@@ -30,3 +30,24 @@ export const SEAFOOD_ITEM_CODES = [
 ] as const;
 export const DAIRY_EGGS_ITEM_CODES = ['A01401', 'A01402', 'A01403', 'A01404', 'A01405'] as const;
 export const OIL_ITEM_CODES = ['A01501', 'A01502'] as const;
+export const FRUIT_ITEM_CODES = [
+	'A01601',
+	'A01602',
+	'A01603',
+	'A01604',
+	'A01605',
+	'A01606',
+	'A01607',
+	'A01608',
+	'A01609',
+	'A01610',
+	'A01611',
+	'A01612',
+	'A01613',
+	'A01614',
+	'A01615',
+	'A01616',
+	'A01617',
+	'A01618',
+	'A01619',
+] as const;

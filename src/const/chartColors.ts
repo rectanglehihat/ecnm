@@ -85,4 +85,25 @@ export const ITEM_CODE_MAPPING = {
 	// 식용유지
 	A01501: { key: 'sesameOil' as const, color: CHART_COLORS[0] },
 	A01502: { key: 'cookingOil' as const, color: CHART_COLORS[1] },
+
+	// 과일
+	A01601: { key: 'apple' as const, color: CHART_COLORS[0] },
+	A01602: { key: 'pear' as const, color: CHART_COLORS[1] },
+	A01603: { key: 'peach' as const, color: CHART_COLORS[2] },
+	A01604: { key: 'grape' as const, color: CHART_COLORS[3] },
+	A01605: { key: 'chestnut' as const, color: CHART_COLORS[4] },
+	A01606: { key: 'persimmon' as const, color: CHART_COLORS[5] },
+	A01607: { key: 'mandarin' as const, color: CHART_COLORS[6] },
+	A01608: { key: 'orange' as const, color: CHART_COLORS[7] },
+	A01609: { key: 'koreanMelon' as const, color: CHART_COLORS[8] },
+	A01610: { key: 'watermelon' as const, color: CHART_COLORS[9] },
+	A01611: { key: 'strawberry' as const, color: CHART_COLORS[10] },
+	A01612: { key: 'banana' as const, color: CHART_COLORS[11] },
+	A01613: { key: 'kiwi' as const, color: CHART_COLORS[12] },
+	A01614: { key: 'blackberry' as const, color: CHART_COLORS[13] },
+	A01615: { key: 'mango' as const, color: CHART_COLORS[14] },
+	A01616: { key: 'cherry' as const, color: CHART_COLORS[15] },
+	A01617: { key: 'avocado' as const, color: CHART_COLORS[16] },
+	A01618: { key: 'pineapple' as const, color: CHART_COLORS[17] },
+	A01619: { key: 'almond' as const, color: CHART_COLORS[18] },
 } as const;

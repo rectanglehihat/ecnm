@@ -7,6 +7,7 @@ import SeafoodSection from '@/app/cpi/components/SeafoodSection';
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import DairySection from '@/app/cpi/components/DairySection';
 import OilSection from '@/app/cpi/components/OilSection';
+import FruitSection from '@/app/cpi/components/FruitSection';
 
 const CpiPage = () => {
 	return (
@@ -100,6 +101,17 @@ const CpiPage = () => {
 					}
 				>
 					<OilSection />
+				</Suspense>
+
+				<Suspense
+					fallback={
+						<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+							<h2 className="text-lg font-semibold mb-4">과일</h2>
+							<ChartSkeleton />
+						</section>
+					}
+				>
+					<FruitSection />
 				</Suspense>
 			</main>
 		</div>
