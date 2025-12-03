@@ -1,5 +1,3 @@
-// CPI 품목별 코드 상수 정의
-
 export const GRAIN_ITEM_CODES = ['A01101', 'A01102', 'A01103', 'A01104', 'A01105', 'A01106', 'A01108'] as const;
 export const NOODLE_ITEM_CODES = [
 	'A01109',
@@ -50,4 +48,40 @@ export const FRUIT_ITEM_CODES = [
 	'A01617',
 	'A01618',
 	'A01619',
+] as const;
+export const VEGETABLE1_ITEM_CODES = [
+	'A01701',
+	'A01702',
+	'A01703',
+	'A01704',
+	'A01705',
+	'A01706',
+	'A01707',
+	'A01708',
+	'A01709',
+	'A01710',
+	'A01711',
+	'A01712',
+	'A01713',
+	'A01714',
+	'A01715',
+] as const;
+
+// 채소2
+export const VEGETABLE2_ITEM_CODES = [
+	'A01716',
+	'A01717',
+	'A01718',
+	'A01719',
+	'A01720',
+	'A01721',
+	'A01722',
+	'A01723',
+	'A01724',
+	'A01725',
+	'A01726',
+	'A01727',
+	'A01728',
+	'A01729',
+	'A01730',
 ] as const;
