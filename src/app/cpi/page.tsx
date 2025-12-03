@@ -10,6 +10,7 @@ import OilSection from '@/app/cpi/components/OilSection';
 import FruitSection from '@/app/cpi/components/FruitSection';
 import Vegetable1Section from '@/app/cpi/components/Vegetable1Section';
 import Vegetable2Section from '@/app/cpi/components/Vegetable2Section';
+import SnackSection from '@/app/cpi/components/SnackSection';
 
 const CpiPage = () => {
 	return (
@@ -136,6 +137,17 @@ const CpiPage = () => {
 					}
 				>
 					<Vegetable2Section />
+				</Suspense>
+
+				<Suspense
+					fallback={
+						<section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+							<h2 className="text-lg font-semibold mb-4">과자 · 빙과류</h2>
+							<ChartSkeleton />
+						</section>
+					}
+				>
+					<SnackSection />
 				</Suspense>
 			</main>
 		</div>

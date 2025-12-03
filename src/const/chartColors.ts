@@ -140,4 +140,19 @@ export const ITEM_CODE_MAPPING = {
 	A01728: { key: 'kim' as const, color: CHART_COLORS[12] },
 	A01729: { key: 'saltedKim' as const, color: CHART_COLORS[13] },
 	A01730: { key: 'seaweed' as const, color: CHART_COLORS[14] },
+
+	// 과자 및 빙과류
+	A01801: { key: 'chips' as const, color: CHART_COLORS[0] },
+	A01802: { key: 'cookies' as const, color: CHART_COLORS[1] },
+	A01803: { key: 'crackers' as const, color: CHART_COLORS[2] },
+	A01804: { key: 'snackMix' as const, color: CHART_COLORS[3] },
+	A01805: { key: 'chocolate' as const, color: CHART_COLORS[4] },
+	A01806: { key: 'candy' as const, color: CHART_COLORS[5] },
+	A01807: { key: 'wafer' as const, color: CHART_COLORS[6] },
+	A01808: { key: 'biscuit' as const, color: CHART_COLORS[7] },
+	A01809: { key: 'puffedSnack' as const, color: CHART_COLORS[8] },
+	A01810: { key: 'iceCream' as const, color: CHART_COLORS[9] },
+	A01811: { key: 'icePop' as const, color: CHART_COLORS[10] },
+	A01812: { key: 'frozenDessert' as const, color: CHART_COLORS[11] },
+
 } as const;
