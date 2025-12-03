@@ -83,8 +83,6 @@ export const VEGETABLE2_ITEM_CODES = [
 	'A01729',
 	'A01730',
 ] as const;
-
-// 과자 및 빙과류
 export const SNACK_ICECREAM_ITEM_CODES = [
 	'A01801',
 	'A01802',
@@ -99,16 +97,25 @@ export const SNACK_ICECREAM_ITEM_CODES = [
 	'A01811',
 	'A01812',
 ] as const;
-export const SNACK_ITEM_CODES = [
-	'A01801',
-	'A01802',
-	'A01803',
-	'A01804',
-	'A01805',
-	'A01806',
-	'A01807',
-	'A01808',
-	'A01809',
-	'A01810',
-	'A01811',
+export const OTHER_GROCERIES_ITEM_CODES = [
+	'A01901',
+	'A01902',
+	'A01903',
+	'A01904',
+	'A01905',
+	'A01906',
+	'A01907',
+	'A01908',
+	'A01909',
+	'A01910',
+	'A01911',
+	'A01912',
+	'A01913',
+	'A01914',
+	'A01915',
+	'A01916',
+	'A01917',
+	'A01918',
+	'A01919',
+	'A01920',
 ] as const;
