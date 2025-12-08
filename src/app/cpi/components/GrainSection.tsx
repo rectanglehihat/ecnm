@@ -1,8 +1,11 @@
 import useCpiStatistics from '@/app/cpi/hooks/useCpiStatistics';
 import CpiChart from '@/app/cpi/components/CpiChart';
 import { GRAIN_ITEM_CODES } from '@/const/cpiItemCodes';
+import useCpiItemCodes from '@/app/cpi/hooks/useCpiItemCodes';
 
 const GrainSection = async () => {
+	// const itemCodes = await useCpiItemCodes();
+
 	const grainStats = await useCpiStatistics([...GRAIN_ITEM_CODES]);
 
 	if (Object.keys(grainStats).length === 0) {
