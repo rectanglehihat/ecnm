@@ -23,11 +23,9 @@ type StatisticItemListResponse = {
 };
 
 import useCpiStatistics from './useCpiStatistics';
-import { getLeafCodesForPath, fetchStatsForPath } from './useCpiItemHierarchy';
 
-/**
- * Fetch a single batch from StatisticItemList API and return parsed result
- */
+const DEFAULT_STAT_CODE = '901Y009';
+
 const fetchStatisticItemListBatch = async (statCode: string, start: number, end: number) => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
@@ -50,13 +48,9 @@ const fetchStatisticItemListBatch = async (statCode: string, start: number, end:
 	};
 };
 
-/**
- * Fetch all StatisticItem rows for a given stat code by paging in batches of `pageSize`.
- */
-const fetchAllStatisticItems = async (statCode = '901Y009', pageSize = 100) => {
+export const fetchAllStatisticItems = async (statCode = DEFAULT_STAT_CODE, pageSize = 100) => {
 	const all: StatisticItem[] = [];
 
-	// first batch to get total
 	const first = await fetchStatisticItemListBatch(statCode, 1, pageSize);
 	all.push(...first.rows);
 	const total = first.total;
@@ -73,10 +67,7 @@ const fetchAllStatisticItems = async (statCode = '901Y009', pageSize = 100) => {
 	return all;
 };
 
-/**
- * Build a parent->children map from list of StatisticItem
- */
-const buildParentMap = (items: StatisticItem[]) => {
+export const buildParentMap = (items: StatisticItem[]) => {
 	const childrenMap: Record<string, StatisticItem[]> = {};
 	const itemByCode: Record<string, StatisticItem> = {};
 
@@ -91,23 +82,27 @@ const buildParentMap = (items: StatisticItem[]) => {
 };
 
 /**
- * Given a starting item code ('A01'), find a child 'A011', then collect all leaf descendants under it.
- * Returns array of leaf ITEM_CODEs like ['A01101','A01102']
+ * Collect all descendant ITEM_CODEs for the node identified by `startCode` following an optional `path`.
+ * - If `path` is provided, it navigates through children matching each path segment.
+ * - Example: path=['A01','A011'] will find A01 under root, then A011 under A01, then collect all leaves under A011.
  */
-const getLeafDescendants = (
+export const collectLeafCodesForPath = (
 	childrenMap: Record<string, StatisticItem[]>,
 	startCode: string,
-	intermediateCode: string,
+	path: string[] = [],
 ) => {
-	// find A011 under A01
-	const childrenOfStart = childrenMap[startCode] ?? [];
-	const intermediate = childrenOfStart.find((c) => c.ITEM_CODE === intermediateCode);
-	if (!intermediate) return [];
+	// navigate from startCode through the path (if provided)
+	let currentCode = startCode;
+	for (const segment of path) {
+		const children = childrenMap[currentCode] ?? [];
+		const found = children.find((c) => c.ITEM_CODE === segment);
+		if (!found) return [];
+		currentCode = found.ITEM_CODE;
+	}
 
-	// traverse descendants under intermediate and collect leaves
+	// now collect leaf ITEM_CODEs under currentCode
 	const leaves: string[] = [];
-	const stack = [intermediate.ITEM_CODE];
-
+	const stack = [currentCode];
 	while (stack.length) {
 		const code = stack.pop()!;
 		const children = childrenMap[code] ?? [];
@@ -118,36 +113,42 @@ const getLeafDescendants = (
 		}
 	}
 
-	// we probably don't want the intermediate itself (e.g., 'A011'), only deeper leaf codes
-	return leaves.filter((c) => c !== intermediateCode);
+	// remove the node itself if it was included and it matches the final path segment
+	if (path.length > 0) {
+		const final = path[path.length - 1];
+		return leaves.filter((c) => c !== final);
+	}
+
+	// if no path provided, remove the startCode itself
+	return leaves.filter((c) => c !== startCode);
 };
 
 /**
- * Public helper: fetch grain-related item codes and then fetch their CPI statistics.
- * - finds `ITEM_CODE === 'A01'`, inside it finds `A011`, then returns the leaf codes under `A011`.
- * - calls `useCpiStatistics` on the leaf codes and returns the statistics map.
+ * High-level helper that returns leaf codes for a path under the top-level root.
+ * - `path` should specify hierarchy segments relative to the root (e.g. ['A01','A011']).
  */
-/**
- * Return leaf ITEM_CODEs under ['A01','A011'] (e.g. ['A01101','A01102']).
- */
-export const getGrainItemCodes = async () => {
-	return await getLeafCodesForPath(['A01', 'A011']);
+export const getLeafCodesForPath = async (path: string[], statCode = DEFAULT_STAT_CODE, pageSize = 100) => {
+	const items = await fetchAllStatisticItems(statCode, pageSize);
+	const { childrenMap } = buildParentMap(items);
+
+	// start from root
+	return collectLeafCodesForPath(childrenMap, '__ROOT__', path);
 };
 
 /**
- * Return statistics for grain leaf codes (wrapper around `fetchStatsForPath`).
+ * High-level helper that fetches statistics for leaf codes found by `path`.
+ * - If no leaf codes are found, returns empty object.
  */
-const getGrainStats = async () => {
-	return await fetchStatsForPath(['A01', 'A011']);
+export const fetchStatsForPath = async (path: string[], statCode = DEFAULT_STAT_CODE) => {
+	const leafCodes = await getLeafCodesForPath(path, statCode);
+	if (leafCodes.length === 0) return {} as Record<string, any[]>;
+	return await useCpiStatistics(leafCodes);
 };
 
-export default getGrainStats;
-
-/**
- * Example usage (server-side / async context):
- *
- * import getGrainStats from './useCpiGrainItemCodes';
- *
- * const grainStats = await getGrainStats();
- * // grainStats is a Record<string, StatisticSearchItem[]> keyed by ITEM_CODE (A01101, A01102...)
- */
+export default {
+	fetchAllStatisticItems,
+	buildParentMap,
+	collectLeafCodesForPath,
+	getLeafCodesForPath,
+	fetchStatsForPath,
+};
