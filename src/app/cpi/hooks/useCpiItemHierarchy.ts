@@ -1,4 +1,4 @@
-type StatisticItem = {
+export type StatisticItem = {
 	STAT_CODE: string;
 	STAT_NAME: string;
 	GRP_CODE: string;
@@ -15,7 +15,7 @@ type StatisticItem = {
 	WEIGHT: string;
 };
 
-type StatisticItemListResponse = {
+export type StatisticItemListResponse = {
 	StatisticItemList: {
 		list_total_count: number;
 		row: StatisticItem[];
@@ -26,6 +26,10 @@ import useCpiStatistics from './useCpiStatistics';
 
 const DEFAULT_STAT_CODE = '901Y009';
 
+// Simple in-memory cache and retry logic
+const _itemsCache: Map<string, { ts: number; items: StatisticItem[] }> = new Map();
+const CACHE_TTL_MS = 1000 * 60 * 60 * 6; // 6 hours
+
 const fetchStatisticItemListBatch = async (statCode: string, start: number, end: number) => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
@@ -35,25 +39,54 @@ const fetchStatisticItemListBatch = async (statCode: string, start: number, end:
 	}
 
 	const url = `${baseUrl}/StatisticItemList/${apiKey}/json/kr/${start}/${end}/${statCode}`;
-	const res = await fetch(url, { cache: 'no-store', next: { revalidate: 3600 } });
-	if (!res.ok) {
-		throw new Error(`StatisticItemList 호출 실패: ${res.status} ${res.statusText}`);
+
+	// Retry with exponential backoff
+	const maxAttempts = 3;
+	let attempt = 0;
+	let lastErr: any = null;
+
+	while (attempt < maxAttempts) {
+		try {
+			console.debug('[useCpiItemHierarchy] fetch batch', { url, attempt });
+			const res = await fetch(url, { cache: 'no-store', next: { revalidate: 3600 } });
+			if (!res.ok) {
+				throw new Error(`StatisticItemList 호출 실패: ${res.status} ${res.statusText}`);
+			}
+
+			const data = (await res.json()) as StatisticItemListResponse;
+			const list = data?.StatisticItemList;
+			return {
+				total: list?.list_total_count ?? 0,
+				rows: list?.row ?? [],
+			};
+		} catch (err) {
+			lastErr = err;
+			attempt += 1;
+			const backoff = 100 * 2 ** attempt;
+			console.debug('[useCpiItemHierarchy] fetch error, will retry', { url, attempt, err: String(err) });
+			// small delay
+			await new Promise((r) => setTimeout(r, backoff));
+		}
 	}
 
-	const data = (await res.json()) as StatisticItemListResponse;
-	const list = data?.StatisticItemList;
-	return {
-		total: list?.list_total_count ?? 0,
-		rows: list?.row ?? [],
-	};
+	throw lastErr;
 };
 
 export const fetchAllStatisticItems = async (statCode = DEFAULT_STAT_CODE, pageSize = 100) => {
+	const cacheKey = `${statCode}:${pageSize}`;
+	const cached = _itemsCache.get(cacheKey);
+	if (cached && Date.now() - cached.ts < CACHE_TTL_MS) {
+		console.debug('[useCpiItemHierarchy] cache hit', { cacheKey, count: cached.items.length });
+		return cached.items;
+	}
+
 	const all: StatisticItem[] = [];
 
 	const first = await fetchStatisticItemListBatch(statCode, 1, pageSize);
 	all.push(...first.rows);
 	const total = first.total;
+
+	console.debug('[useCpiItemHierarchy] first batch', { statCode, pageSize, fetched: first.rows.length, total });
 
 	let fetched = first.rows.length;
 	while (fetched < total) {
@@ -64,6 +97,13 @@ export const fetchAllStatisticItems = async (statCode = DEFAULT_STAT_CODE, pageS
 		fetched = all.length;
 	}
 
+	// store cache
+	try {
+		_itemsCache.set(cacheKey, { ts: Date.now(), items: all });
+	} catch (e) {
+		// ignore cache set errors
+	}
+
 	return all;
 };
 
@@ -71,12 +111,35 @@ export const buildParentMap = (items: StatisticItem[]) => {
 	const childrenMap: Record<string, StatisticItem[]> = {};
 	const itemByCode: Record<string, StatisticItem> = {};
 
+	// Helper to normalize ITEM_CODE/P_ITEM_CODE coming from ECOS which can be compound like
+	// `A-A01_A011-A01101`. Normalize to the last token (e.g. `A01101`).
+	const normalize = (raw?: string | null) => {
+		if (!raw) return null;
+		// replace dashes with underscores, then split by underscore and take last segment
+		const transformed = raw.replace(/-/g, '_');
+		const parts = transformed.split('_').filter(Boolean);
+		return parts.length ? parts[parts.length - 1] : null;
+	};
+
 	items.forEach((it) => {
-		itemByCode[it.ITEM_CODE] = it;
-		const parent = it.P_ITEM_CODE ?? '__ROOT__';
-		if (!childrenMap[parent]) childrenMap[parent] = [];
-		childrenMap[parent].push(it);
+		const normCode = normalize(it.ITEM_CODE) ?? it.ITEM_CODE;
+		const normParent = normalize(it.P_ITEM_CODE) ?? '__ROOT__';
+
+		// attach normalized codes as metadata for debugging
+		(it as any).__normCode = normCode;
+		(it as any).__normParent = normParent;
+
+		itemByCode[normCode] = it;
+		if (!childrenMap[normParent]) childrenMap[normParent] = [];
+		// store item under normalized parent key
+		childrenMap[normParent].push(it);
+		// ensure there's an entry for this code (may be parent for others)
+		if (!childrenMap[normCode]) childrenMap[normCode] = childrenMap[normCode] ?? [];
 	});
+
+	// debug: log top-level root children count and sample
+	const rootChildren = childrenMap['__ROOT__'] ?? [];
+	console.debug('[useCpiItemHierarchy] buildParentMap', { totalItems: items.length, rootChildrenCount: rootChildren.length, sampleRootCodes: rootChildren.slice(0, 10).map((c) => ({ item: c.ITEM_CODE, norm: (c as any).__normCode })) });
 
 	return { childrenMap, itemByCode };
 };
@@ -93,11 +156,13 @@ export const collectLeafCodesForPath = (
 ) => {
 	// navigate from startCode through the path (if provided)
 	let currentCode = startCode;
+	const navSegments: string[] = [];
 	for (const segment of path) {
 		const children = childrenMap[currentCode] ?? [];
 		const found = children.find((c) => c.ITEM_CODE === segment);
 		if (!found) return [];
 		currentCode = found.ITEM_CODE;
+		navSegments.push(currentCode);
 	}
 
 	// now collect leaf ITEM_CODEs under currentCode
@@ -116,11 +181,14 @@ export const collectLeafCodesForPath = (
 	// remove the node itself if it was included and it matches the final path segment
 	if (path.length > 0) {
 		const final = path[path.length - 1];
-		return leaves.filter((c) => c !== final);
+		const filtered = leaves.filter((c) => c !== final);
+		console.debug('[useCpiItemHierarchy] collectLeafCodesForPath', { path, navSegments, leafCount: filtered.length, leafSample: filtered.slice(0, 10) });
+		return filtered;
 	}
 
-	// if no path provided, remove the startCode itself
-	return leaves.filter((c) => c !== startCode);
+	const filtered = leaves.filter((c) => c !== startCode);
+	console.debug('[useCpiItemHierarchy] collectLeafCodesForPath (no path)', { startCode, leafCount: filtered.length, leafSample: filtered.slice(0, 10) });
+	return filtered;
 };
 
 /**
