@@ -16,6 +16,9 @@ export async function GET() {
 	// Step 4: CPI 조회
 	const grainStats = await useCpiStatistics(GRAIN_ITEM_CODES);
 
+	console.log('GRAIN_ITEM_CODES', GRAIN_ITEM_CODES);
+	console.log('grainStats', grainStats);
+
 	return Response.json({
 		GRAIN_ITEM_CODES,
 		grainStats,
