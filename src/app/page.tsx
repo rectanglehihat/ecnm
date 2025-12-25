@@ -12,12 +12,12 @@ export default function Home() {
 					<p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">모두의 국가 경제 통계</p>
 				</div>
 				<div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-					<Button
+					{/* <Button
 						href="/hundred-key-statistics"
 						className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
 					>
 						100대 통계지표
-					</Button>
+					</Button> */}
 					<Link
 						href="/cpi"
 						className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
