@@ -22,7 +22,7 @@ type StatisticItemListResponse = {
 	};
 };
 
-const BASE_URL = 'https://ecos.bok.or.kr/api/StatisticItemList/sample/json/kr';
+const BASE_URL = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
 export async function fetchStatisticItemList(): Promise<StatisticItem[]> {
 	let start = 1;
