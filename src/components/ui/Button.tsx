@@ -1,26 +1,32 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { memo } from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  href?: string;
-  className?: string;
-  children: React.ReactNode;
+	href?: string;
+	className?: string;
+	children: React.ReactNode;
 }
 
-export default function Button({ href, className = '', children, ...props }: ButtonProps) {
-  const classes = className;
+const Button = ({ href, className = '', children, ...props }: ButtonProps) => {
+	if (href) {
+		return (
+			<Link
+				href={href}
+				className={className}
+			>
+				{children}
+			</Link>
+		);
+	}
 
-  if (href) {
-    return (
-      <Link href={href} className={classes}>
-        {children}
-      </Link>
-    );
-  }
+	return (
+		<button
+			className={className}
+			{...props}
+		>
+			{children}
+		</button>
+	);
+};
 
-  return (
-    <button className={classes} {...props}>
-      {children}
-    </button>
-  );
-}
+export default memo(Button);
