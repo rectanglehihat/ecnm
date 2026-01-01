@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo, memo } from 'react';
 import {
 	LineChart as RechartsLineChart,
 	Line,
@@ -74,6 +75,76 @@ const LineChart = ({
 	showLegend = true,
 	showTooltip = true,
 }: LineChartProps) => {
+	const memoizedMargin = useMemo(
+		() => ({
+			top: 20,
+			right: 30,
+			left: 20,
+			bottom: 5,
+			...margin,
+		}),
+		[margin],
+	);
+
+	const processedLines = useMemo(
+		() =>
+			lines.map((line, index) => ({
+				...line,
+				color: line.color || defaultColors[index % defaultColors.length],
+				strokeWidth: line.strokeWidth || 2,
+				dotRadius: line.dotRadius || 4,
+				activeDotRadius: line.activeDotRadius || 6,
+			})),
+		[lines],
+	);
+
+	const tooltipContentStyle = useMemo(
+		() => ({
+			backgroundColor: 'var(--tw-color-zinc-900)',
+			border: 'none',
+			borderRadius: '6px',
+			fontSize: '12px',
+			padding: '8px',
+			minWidth: 'auto',
+			boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+		}),
+		[],
+	);
+
+	const tooltipLabelStyle = useMemo(
+		() => ({
+			color: 'var(--tw-color-zinc-50)',
+			fontSize: '14px',
+			fontWeight: '600',
+			marginBottom: '2px',
+		}),
+		[],
+	);
+
+	const tooltipItemStyle = useMemo(
+		() => ({
+			fontSize: '12px',
+			fontWeight: '600',
+			padding: '1px 0',
+		}),
+		[],
+	);
+
+	const yAxisLabelConfig = useMemo(
+		() =>
+			yAxisLabel
+				? {
+						value: yAxisLabel,
+						angle: -90,
+						position: 'insideLeft' as const,
+				  }
+				: undefined,
+		[yAxisLabel],
+	);
+
+	// XAxis, YAxis tick 객체 메모이제이션
+	const axisTickStyle = useMemo(() => ({ fill: 'currentColor' }), []);
+
 	if (!data || data.length === 0) {
 		return (
 			<div
@@ -84,15 +155,6 @@ const LineChart = ({
 			</div>
 		);
 	}
-
-	// 자동으로 색상 할당 (색상이 지정되지 않은 경우)
-	const processedLines = lines.map((line, index) => ({
-		...line,
-		color: line.color || defaultColors[index % defaultColors.length],
-		strokeWidth: line.strokeWidth || 2,
-		dotRadius: line.dotRadius || 4,
-		activeDotRadius: line.activeDotRadius || 6,
-	}));
 
 	return (
 		<div
@@ -105,7 +167,7 @@ const LineChart = ({
 			>
 				<RechartsLineChart
 					data={data}
-					margin={margin}
+					margin={memoizedMargin}
 				>
 					{showGrid && (
 						<CartesianGrid
@@ -116,45 +178,20 @@ const LineChart = ({
 					<XAxis
 						dataKey={xAxisKey}
 						className="text-xs"
-						tick={{ fill: 'currentColor' }}
+						tick={axisTickStyle}
 						stroke="currentColor"
 					/>
 					<YAxis
 						className="text-xs"
-						tick={{ fill: 'currentColor' }}
+						tick={axisTickStyle}
 						stroke="currentColor"
-						label={
-							yAxisLabel
-								? {
-										value: yAxisLabel,
-										angle: -90,
-										position: 'insideLeft',
-								  }
-								: undefined
-						}
+						label={yAxisLabelConfig}
 					/>
 					{showTooltip && (
 						<Tooltip
-							contentStyle={{
-								backgroundColor: 'var(--tw-color-zinc-900)',
-								border: 'none',
-								borderRadius: '6px',
-								fontSize: '12px',
-								padding: '8px',
-								minWidth: 'auto',
-								boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-							}}
-							labelStyle={{
-								color: 'var(--tw-color-zinc-50)',
-								fontSize: '14px',
-								fontWeight: '600',
-								marginBottom: '2px',
-							}}
-							itemStyle={{
-								fontSize: '12px',
-								fontWeight: '600',
-								padding: '1px 0',
-							}}
+							contentStyle={tooltipContentStyle}
+							labelStyle={tooltipLabelStyle}
+							itemStyle={tooltipItemStyle}
 						/>
 					)}
 					{showLegend && <Legend />}
@@ -177,4 +214,4 @@ const LineChart = ({
 	);
 };
 
-export default LineChart;
+export default memo(LineChart);
