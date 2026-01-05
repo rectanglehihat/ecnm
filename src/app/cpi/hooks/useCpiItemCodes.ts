@@ -25,7 +25,7 @@ type StatisticItemListResponse = {
 export type CpiItemHierarchy = {
 	code: string;
 	name: string;
-	children: CpiItemHierarchy[];
+	children: Record<string, CpiItemHierarchy>;
 };
 
 const useCpiItemCodes = async (statCode = '901Y009', start = 1, end = 100): Promise<StatisticItem[]> => {
@@ -64,15 +64,15 @@ const useCpiItemCodes = async (statCode = '901Y009', start = 1, end = 100): Prom
  * CYCLE이 'A'인 항목만 필터링하며, 한번에 10개씩 호출합니다.
  * A의 하위 항목을 모두 가져오면 중단합니다.
  * @param statCode 통계표 코드 (기본값: '901Y009')
- * @returns 계층구조 트리
+ * @returns 계층구조 객체 (최상위 항목 A)
  */
-export const fetchCpiItemHierarchy = async (statCode = '901Y009'): Promise<CpiItemHierarchy[]> => {
+export const fetchCpiItemHierarchy = async (statCode = '901Y009'): Promise<CpiItemHierarchy | null> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
 	if (!apiKey || !baseUrl) {
 		console.error('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.');
-		return [];
+		return null;
 	}
 
 	const BATCH_SIZE = 10; // 한번에 10개씩 호출
@@ -124,28 +124,70 @@ export const fetchCpiItemHierarchy = async (statCode = '901Y009'): Promise<CpiIt
 	const aItems = allItems.filter((item) => item.CYCLE === 'A' && item.ITEM_CODE.startsWith('A'));
 
 	// 계층구조를 메모리에서 구성
-	const buildHierarchy = (parentCode: string | null): CpiItemHierarchy[] => {
-		// 현재 부모의 직접적인 하위 항목 찾기
-		const children = aItems.filter((item) => {
-			if (parentCode === null) {
-				// 최상위: ITEM_CODE가 'A'인 항목
-				return item.ITEM_CODE === 'A';
+	const buildHierarchy = (parentCode: string | null): CpiItemHierarchy | null => {
+		// 최상위 항목(A) 찾기
+		if (parentCode === null) {
+			const topItem = aItems.find((item) => item.ITEM_CODE === 'A');
+			if (!topItem) {
+				return null;
 			}
-			// 하위 항목: P_ITEM_CODE가 부모 코드와 일치하는 항목
-			return item.P_ITEM_CODE === parentCode;
-		});
 
-		// 하위 항목이 없으면 재귀 중단
-		if (children.length === 0) {
-			return [];
+			// A의 직접적인 하위 항목들 찾기 (P_ITEM_CODE가 'A'인 항목들)
+			const directChildren = aItems.filter((item) => item.P_ITEM_CODE === 'A');
+			const childHierarchy: Record<string, CpiItemHierarchy> = {};
+
+			// 각 하위 항목에 대해 재귀적으로 구성
+			for (const item of directChildren) {
+				const child = buildHierarchy(item.ITEM_CODE);
+				if (child) {
+					childHierarchy[item.ITEM_CODE] = child;
+				}
+			}
+
+			return {
+				code: topItem.ITEM_CODE,
+				name: topItem.ITEM_NAME,
+				children: childHierarchy,
+			};
 		}
 
-		// 각 하위 항목에 대해 재귀적으로 하위 항목을 탐색
-		return children.map((item) => ({
-			code: item.ITEM_CODE,
-			name: item.ITEM_NAME,
-			children: buildHierarchy(item.ITEM_CODE),
-		}));
+		// 현재 부모의 직접적인 하위 항목 찾기
+		const children = aItems.filter((item) => item.P_ITEM_CODE === parentCode);
+
+		// 하위 항목이 없으면 재귀 중단 (리프 노드)
+		if (children.length === 0) {
+			// 현재 항목 자체를 반환 (하위 항목이 없는 경우)
+			const currentItem = aItems.find((item) => item.ITEM_CODE === parentCode);
+			if (!currentItem) {
+				return null;
+			}
+			return {
+				code: currentItem.ITEM_CODE,
+				name: currentItem.ITEM_NAME,
+				children: {},
+			};
+		}
+
+		// 하위 항목들을 객체로 구성
+		const childHierarchy: Record<string, CpiItemHierarchy> = {};
+		for (const item of children) {
+			const child = buildHierarchy(item.ITEM_CODE);
+			if (child) {
+				childHierarchy[item.ITEM_CODE] = child;
+			}
+		}
+
+		// 현재 항목 정보 찾기
+		const currentItem = aItems.find((item) => item.ITEM_CODE === parentCode);
+		if (!currentItem) {
+			return null;
+		}
+
+		return {
+			code: currentItem.ITEM_CODE,
+			name: currentItem.ITEM_NAME,
+			children: childHierarchy,
+		};
 	};
 
 	return buildHierarchy(null);
