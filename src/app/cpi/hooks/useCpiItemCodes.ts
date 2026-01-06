@@ -39,7 +39,7 @@ const useCpiItemCodes = async (statCode = '901Y009', start = 1, end = 100): Prom
 
 	try {
 		const url = `${baseUrl}/StatisticItemList/${apiKey}/json/kr/${start}/${end}/${statCode}`;
-		const res = await fetch(url, { cache: 'no-store', next: { revalidate: 60 * 60 * 24 } });
+		const res = await fetch(url, { next: { revalidate: 60 * 60 * 24 } });
 
 		if (!res.ok) {
 			console.error('한국은행(ECOS) 통계항목 호출 실패', res.status, res.statusText, url);
@@ -86,7 +86,7 @@ export const fetchCpiItemHierarchy = async (statCode = '901Y009'): Promise<CpiIt
 		try {
 			const end = start + BATCH_SIZE - 1;
 			const url = `${baseUrl}/StatisticItemList/${apiKey}/json/kr/${start}/${end}/${statCode}`;
-			const res = await fetch(url, { cache: 'no-store', next: { revalidate: 60 * 60 * 24 } });
+			const res = await fetch(url, { next: { revalidate: 60 * 60 * 24 } });
 
 			if (!res.ok) {
 				console.error(`한국은행(ECOS) 통계항목 호출 실패 (${start}-${end})`, res.status, res.statusText);
