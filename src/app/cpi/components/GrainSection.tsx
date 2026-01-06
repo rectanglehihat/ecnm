@@ -1,11 +1,10 @@
 import useCpiStatistics from '@/app/cpi/hooks/useCpiStatistics';
 import CpiChart from '@/app/cpi/components/CpiChart';
 import { GRAIN_ITEM_CODES } from '@/const/cpiItemCodes';
-import useCpiItemCodes, { fetchCpiItemHierarchy } from '@/app/cpi/hooks/useCpiItemCodes';
+import { fetchCpiItemHierarchy } from '@/app/cpi/hooks/useCpiItemCodes';
 
 const GrainSection = async () => {
 	const grainStats = await useCpiStatistics([...GRAIN_ITEM_CODES]);
-
 	const hierarchy = await fetchCpiItemHierarchy('901Y009');
 	console.log('❤️ hierarchy', hierarchy);
 
