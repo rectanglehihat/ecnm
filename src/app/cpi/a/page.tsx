@@ -1,8 +1,16 @@
 import GrainSection from '@/app/cpi/components/GrainSection';
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import { Suspense } from 'react';
+import { fetchCpiItemHierarchy } from '@/app/cpi/hooks/useCpiItemCodes';
 
-const APage = () => {
+const APage = async () => {
+	const hierarchy = await fetchCpiItemHierarchy('901Y009', 'A');
+	console.log('❤️ hierarchy', hierarchy);
+
+	if (!hierarchy) {
+		return <div className="text-red-500">❌ 데이터 조회 실패</div>;
+	}
+
 	return (
 		<>
 			<section className="text-sm text-zinc-700 dark:text-zinc-300 flex flex-col gap-2">
