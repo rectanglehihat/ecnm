@@ -4,24 +4,16 @@ import { Suspense } from 'react';
 import { fetchCpiItemHierarchy } from '@/app/cpi/hooks/useCpiItemCodes';
 
 const APage = async () => {
-	const hierarchy = await fetchCpiItemHierarchy('901Y009', 'A');
-	console.log('❤️ hierarchy', hierarchy);
+	const aHierarchy = await fetchCpiItemHierarchy('901Y009', 'A');
+	console.log('❤️ aHierarchy', aHierarchy);
 
-	if (!hierarchy) {
+	if (!aHierarchy) {
 		return <div className="text-red-500">❌ 데이터 조회 실패</div>;
 	}
 
 	return (
 		<>
-			<section className="text-sm text-zinc-700 dark:text-zinc-300 flex flex-col gap-2">
-				<p className="font-semibold">🍎 2020=100</p>
-				<ul>
-					<li>기준연도: 2020년</li>
-					<li>지수: 기준연도의 가격 수준을 100으로 고정</li>
-					<li>다른 시점의 CPI가 100보다 높으면 기준연도보다 평균 물가가 높다는 뜻</li>
-					<li>다른 시점의 CPI가 100보다 낮으면 기준연도보다 평균 물가가 낮다는 뜻</li>
-				</ul>
-			</section>
+			<h1 className="text-2xl font-semibold">{aHierarchy.name}</h1>
 
 			<Suspense
 				fallback={
