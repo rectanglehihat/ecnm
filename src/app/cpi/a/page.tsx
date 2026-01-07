@@ -13,7 +13,7 @@ const APage = async () => {
 
 	return (
 		<>
-			<h1 className="text-2xl font-semibold">{aHierarchy.name}</h1>
+			<h1 className="text-2xl font-bold">{aHierarchy.name}</h1>
 
 			<Suspense
 				fallback={
