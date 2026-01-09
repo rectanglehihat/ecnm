@@ -2,6 +2,7 @@ import GrainSection from '@/app/cpi/components/GrainSection';
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import { Suspense } from 'react';
 import { fetchCpiItemHierarchy } from '@/app/cpi/hooks/useCpiItemCodes';
+import HierarchyButtons from './components/HierarchyButtons';
 
 const APage = async () => {
 	const aHierarchy = await fetchCpiItemHierarchy('901Y009', 'A');
@@ -14,6 +15,7 @@ const APage = async () => {
 	return (
 		<>
 			<h1 className="text-2xl font-bold">{aHierarchy.name}</h1>
+			<HierarchyButtons children={aHierarchy.children} />
 
 			<Suspense
 				fallback={
