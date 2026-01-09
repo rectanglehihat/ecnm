@@ -5,6 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	href?: string;
 	className?: string;
 	children: React.ReactNode;
+	onClick?: () => void;
 }
 
 const Button = ({ href, className = '', children, ...props }: ButtonProps) => {
