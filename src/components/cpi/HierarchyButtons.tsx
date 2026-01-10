@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Button from '@/components/ui/Button';
-import type { CpiItemHierarchy } from '@/app/cpi/hooks/useCpiItemCodes';
+import type { CpiItemHierarchy } from '@/app/hooks/cpi/useCpiItemCodes';
 
 interface HierarchyButtonsProps {
 	children: Record<string, CpiItemHierarchy>;
