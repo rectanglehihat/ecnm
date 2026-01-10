@@ -1,5 +1,5 @@
-import useCpiStatistics from '@/app/cpi/hooks/useCpiStatistics';
-import CpiChart from '@/app/cpi/components/CpiChart';
+import useCpiStatistics from '@/app/hooks/cpi/useCpiStatistics';
+import CpiChart from '@/components/cpi/CpiChart';
 import { VEGETABLE1_ITEM_CODES } from '@/const/cpiItemCodes';
 
 const Vegetable1Section = async () => {
