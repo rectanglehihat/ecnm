@@ -1,7 +1,7 @@
 import GrainSection from '@/components/cpi/GrainSection';
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import { Suspense } from 'react';
-import { fetchCpiItemHierarchy } from '@/app/hooks/cpi/useCpiItemCodes';
+import { fetchCpiItemHierarchy } from '@/hooks/cpi/useCpiItemCodes';
 import HierarchyButtons from '../../../components/cpi/HierarchyButtons';
 
 const APage = async () => {
