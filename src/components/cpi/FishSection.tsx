@@ -1,4 +1,4 @@
-import useCpiStatistics from '@/app/hooks/cpi/useCpiStatistics';
+import useCpiStatistics from '@/hooks/cpi/useCpiStatistics';
 import CpiChart from '@/components/cpi/CpiChart';
 import { FISH_ITEM_CODES } from '@/const/cpiItemCodes';
 
