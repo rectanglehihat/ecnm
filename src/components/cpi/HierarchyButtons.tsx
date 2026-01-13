@@ -1,21 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import type { CpiItemHierarchy } from '@/hooks/cpi/useCpiItemCodes';
 
 interface HierarchyButtonsProps {
 	children: Record<string, CpiItemHierarchy>;
-	onClick?: (child: CpiItemHierarchy) => void;
 }
 
-const HierarchyButtons = ({ children, onClick }: HierarchyButtonsProps) => {
-	const [selectedCode, setSelectedCode] = useState<string | null>(null);
+const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const selectedCode = searchParams.get('code');
 
 	const handleClick = (child: CpiItemHierarchy) => {
 		console.log('child', child);
-		setSelectedCode(selectedCode === child.code ? null : child.code);
-		onClick?.(child);
+		const params = new URLSearchParams(searchParams.toString());
+
+		if (selectedCode === child.code) {
+			params.delete('code');
+			params.delete('name');
+		} else {
+			params.set('code', child.code);
+			params.set('name', child.name);
+		}
+
+		router.push(`?${params.toString()}`, { scroll: false });
 	};
 
 	return (
