@@ -1,23 +1,21 @@
 import DynamicSection from '@/components/cpi/DynamicSection';
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import { Suspense } from 'react';
-import { fetchCpiItemHierarchy } from '@/hooks/cpi/useCpiItemCodes';
-import HierarchyButtons from '../../../components/cpi/HierarchyButtons';
+import { useCpiItemCodes } from '@/hooks/cpi/useCpiItemCodes';
+import HierarchyButtons from '@/components/cpi/HierarchyButtons';
 
 interface APageProps {
 	searchParams: Promise<{ code?: string; name?: string }>;
 }
 
 const APage = async ({ searchParams }: APageProps) => {
-	const aHierarchy = await fetchCpiItemHierarchy('901Y009', 'A');
+	const aHierarchy = await useCpiItemCodes('901Y009', 'A');
 	const params = await searchParams;
 
 	console.log('❤️ aHierarchy', aHierarchy);
 	console.log('🍑 params', params);
 
-	if (!aHierarchy) {
-		return <div className="text-red-500">❌ 데이터 조회 실패</div>;
-	}
+	if (!aHierarchy) return <div className="text-red-500">❌ 데이터 조회 실패</div>;
 
 	// 첫 번째 레벨: params.code가 있으면 해당 항목, 없으면 첫 번째 자식 사용
 	const parentCode = params.code || Object.keys(aHierarchy.children)[0];

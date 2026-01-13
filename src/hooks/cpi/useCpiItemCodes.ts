@@ -28,37 +28,6 @@ export type CpiItemHierarchy = {
 	children: Record<string, CpiItemHierarchy>;
 };
 
-const useCpiItemCodes = async (statCode = '901Y009', start = 1, end = 100): Promise<StatisticItem[]> => {
-	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
-	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
-
-	if (!apiKey || !baseUrl) {
-		console.error('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.');
-		return [];
-	}
-
-	try {
-		const url = `${baseUrl}/StatisticItemList/${apiKey}/json/kr/${start}/${end}/${statCode}`;
-		const res = await fetch(url, { next: { revalidate: 60 * 60 * 24 } });
-
-		if (!res.ok) {
-			console.error('한국은행(ECOS) 통계항목 호출 실패', res.status, res.statusText, url);
-			return [];
-		}
-
-		const data = (await res.json()) as StatisticItemListResponse;
-
-		const rows = data?.StatisticItemList?.row ?? [];
-
-		console.log(`🌱 StatisticItemList (${statCode}) loaded:`, rows.length);
-
-		return rows;
-	} catch (error) {
-		console.error('한국은행(ECOS) 통계항목 호출 중 오류 발생:', error, statCode);
-		return [];
-	}
-};
-
 /**
  * 소비자물가지수의 통계항목 코드를 계층구조로 재귀적으로 추출합니다.
  * CYCLE이 'A'인 항목만 필터링하며, 한번에 10개씩 호출합니다.
@@ -67,10 +36,7 @@ const useCpiItemCodes = async (statCode = '901Y009', start = 1, end = 100): Prom
  * @param rootItemCode 최상위 항목 코드 (기본값: 'A')
  * @returns 계층구조 객체 (최상위 항목 rootItemCode)
  */
-export const fetchCpiItemHierarchy = async (
-	statCode = '901Y009',
-	rootItemCode = 'A',
-): Promise<CpiItemHierarchy | null> => {
+export const useCpiItemCodes = async (statCode = '901Y009', rootItemCode = 'A'): Promise<CpiItemHierarchy | null> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
@@ -202,5 +168,3 @@ export const fetchCpiItemHierarchy = async (
 
 	return buildHierarchy(null);
 };
-
-export default useCpiItemCodes;
