@@ -3,14 +3,16 @@ import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import { Suspense } from 'react';
 import { useCpiItemCodes } from '@/hooks/cpi/useCpiItemCodes';
 import HierarchyButtons from '@/components/cpi/HierarchyButtons';
-
-export const revalidate = 3600; // 1시간
+import { cacheLife } from 'next/cache';
 
 interface APageProps {
 	searchParams: Promise<{ code?: string; name?: string }>;
 }
 
-const APage = async ({ searchParams }: APageProps) => {
+export default async function APage({ searchParams }: APageProps) {
+	// 'use cache';
+	// cacheLife('hours');
+
 	const aHierarchy = await useCpiItemCodes('901Y009', 'A');
 	const params = await searchParams;
 
@@ -23,9 +25,7 @@ const APage = async ({ searchParams }: APageProps) => {
 	const parentCode = params.code || Object.keys(aHierarchy.children)[0];
 	const parentItem = aHierarchy.children[parentCode];
 
-	if (!parentItem) {
-		return <div className="text-red-500">❌ 카테고리 데이터 조회 실패</div>;
-	}
+	if (!parentItem) return <div className="text-red-500">❌ 카테고리 데이터 조회 실패</div>;
 
 	console.log('!!!!!! parentCode', parentCode);
 	console.log('!!!!!! parentItem', parentItem);
@@ -38,9 +38,7 @@ const APage = async ({ searchParams }: APageProps) => {
 			{Object.values(parentItem.children).map((childItem) => {
 				const childItemCodes = childItem.children ? Object.values(childItem.children).map((item) => item.code) : [];
 
-				if (childItemCodes.length === 0) {
-					return null;
-				}
+				if (childItemCodes.length === 0) return null;
 
 				return (
 					<Suspense
@@ -61,6 +59,4 @@ const APage = async ({ searchParams }: APageProps) => {
 			})}
 		</>
 	);
-};
-
-export default APage;
+}
