@@ -1,8 +1,10 @@
 import Button from '@/components/ui/Button';
+import { cacheLife } from 'next/cache';
 
-export const revalidate = 86400; // 24시간
+export default async function CpiPage() {
+	'use cache';
+	cacheLife('minutes');
 
-const CpiPage = () => {
 	return (
 		<main>
 			<h1 className="text-2xl font-bold">소비자물가지수(CPI)</h1>
@@ -25,6 +27,4 @@ const CpiPage = () => {
 			</Button>
 		</main>
 	);
-};
-
-export default CpiPage;
+}
