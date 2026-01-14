@@ -1,5 +1,7 @@
 import Button from '@/components/ui/Button';
 
+export const revalidate = 86400; // 24시간
+
 const CpiPage = () => {
 	return (
 		<main>
