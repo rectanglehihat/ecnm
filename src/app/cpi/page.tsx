@@ -1,10 +1,6 @@
 import Button from '@/components/ui/Button';
-import { cacheLife } from 'next/cache';
 
 export default async function CpiPage() {
-	// 'use cache';
-	// cacheLife('minutes');
-
 	return (
 		<main>
 			<h1 className="text-2xl font-bold">소비자물가지수(CPI)</h1>
