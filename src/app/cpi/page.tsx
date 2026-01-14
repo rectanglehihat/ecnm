@@ -2,8 +2,8 @@ import Button from '@/components/ui/Button';
 import { cacheLife } from 'next/cache';
 
 export default async function CpiPage() {
-	'use cache';
-	cacheLife('minutes');
+	// 'use cache';
+	// cacheLife('minutes');
 
 	return (
 		<main>

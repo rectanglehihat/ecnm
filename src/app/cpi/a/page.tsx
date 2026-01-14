@@ -3,16 +3,12 @@ import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import { Suspense } from 'react';
 import { useCpiItemCodes } from '@/hooks/cpi/useCpiItemCodes';
 import HierarchyButtons from '@/components/cpi/HierarchyButtons';
-import { cacheLife } from 'next/cache';
 
 interface APageProps {
 	searchParams: Promise<{ code?: string; name?: string }>;
 }
 
 export default async function APage({ searchParams }: APageProps) {
-	// 'use cache';
-	// cacheLife('hours');
-
 	const aHierarchy = await useCpiItemCodes('901Y009', 'A');
 	const params = await searchParams;
 
