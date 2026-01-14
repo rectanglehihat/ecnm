@@ -4,6 +4,8 @@ import { Suspense } from 'react';
 import { useCpiItemCodes } from '@/hooks/cpi/useCpiItemCodes';
 import HierarchyButtons from '@/components/cpi/HierarchyButtons';
 
+export const revalidate = 3600; // 1시간
+
 interface APageProps {
 	searchParams: Promise<{ code?: string; name?: string }>;
 }
