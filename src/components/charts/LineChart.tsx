@@ -100,8 +100,8 @@ const LineChart = ({
 
 	const tooltipContentStyle = useMemo(
 		() => ({
-			backgroundColor: 'var(--tw-color-zinc-900)',
-			border: 'none',
+			backgroundColor: 'rgba(255, 255, 255, 0.9)',
+			border: '1px solid #52525b',
 			borderRadius: '6px',
 			fontSize: '12px',
 			padding: '8px',
