@@ -17,7 +17,7 @@ export default async function CpiPage() {
 			</section>
 			<Button
 				href="/cpi/a"
-				className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
+				className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
 			>
 				식료품 및 비주류음료
 			</Button>
