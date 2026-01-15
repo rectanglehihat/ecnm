@@ -34,10 +34,8 @@ const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
 				{Object.values(children || {}).map((child) => (
 					<Button
 						key={child.code}
-						className={`cursor-pointer flex h-12 w-fit items-center justify-center gap-2 rounded-full px-5 text-background transition-colors md:w-[158px] ${
-							selectedCode === child.code
-								? 'bg-[#383838] dark:bg-[#ccc]'
-								: 'bg-foreground hover:bg-[#383838] dark:hover:bg-[#ccc]'
+						className={`cursor-pointer flex h-12 w-fit items-center justify-center gap-2 rounded-full px-5 text-background transition-colors font-semibold md:w-[158px] ${
+							selectedCode === child.code ? 'bg-[#383838] dark:bg-[#ccc]' : 'bg-gray-300 text-gray-700'
 						}`}
 						onClick={() => handleClick(child)}
 					>
