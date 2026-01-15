@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { LineChart } from '@/components/charts';
 import type { LineConfig, ChartDataPoint } from '@/components/charts';
-import { ITEM_CODE_MAPPING } from '@/const/chartColors';
+import { CHART_COLORS } from '@/const/CHART_COLORS';
 
 type StatisticItem = {
 	DATA_VALUE: string;
@@ -19,6 +19,11 @@ type CpiChartProps = {
 };
 
 const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.', height = '24rem' }: CpiChartProps) => {
+	// itemCode를 기반으로 일관된 색상 인덱스 생성
+	const getColorIndex = (code: string) => {
+		return code.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % CHART_COLORS.length;
+	};
+
 	// 모든 연도를 수집 및 정렬
 	const sortedYears = useMemo(() => {
 		const allYears = new Set<string>();
@@ -34,11 +39,8 @@ const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.',
 			const yearData: any = { year };
 
 			Object.entries(data).forEach(([itemCode, dataset]) => {
-				const mapping = ITEM_CODE_MAPPING[itemCode as keyof typeof ITEM_CODE_MAPPING];
-				if (mapping) {
-					const item = dataset.find((d) => d.TIME === year);
-					yearData[mapping.key] = item ? parseFloat(item.DATA_VALUE) || 0 : null;
-				}
+				const item = dataset.find((d) => d.TIME === year);
+				yearData[itemCode] = item ? parseFloat(item.DATA_VALUE) || 0 : null;
 			});
 
 			return yearData;
@@ -49,17 +51,15 @@ const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.',
 	const lines: LineConfig[] = useMemo(() => {
 		const result: LineConfig[] = [];
 		Object.entries(data).forEach(([itemCode, dataset]) => {
-			const mapping = ITEM_CODE_MAPPING[itemCode as keyof typeof ITEM_CODE_MAPPING];
-			if (mapping && dataset.length > 0) {
-				result.push({
-					dataKey: mapping.key,
-					name: dataset[0]?.ITEM_NAME1 || '',
-					color: mapping.color,
-				});
-			}
+			if (dataset.length === 0) return;
+			result.push({
+				dataKey: itemCode,
+				name: dataset[0]?.ITEM_NAME1 || '',
+				color: CHART_COLORS[getColorIndex(itemCode)],
+			});
 		});
 		return result;
-	}, [data]);
+	}, [data, getColorIndex]);
 
 	// 단위명 추출
 	const unitName = useMemo(() => {
