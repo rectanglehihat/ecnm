@@ -1,6 +1,11 @@
-import Button from '@/components/ui/Button';
+import { CpiTopLevelButtons } from '@/components/cpi/CpiTopLevelButtons';
+import { useCpiItemCodes } from '@/hooks/cpi/useCpiItemCodes';
 
 export default async function CpiPage() {
+	const hierarchy = await useCpiItemCodes('901Y009');
+
+	if (!hierarchy) return <div className="text-red-500">❌ 데이터 조회 실패</div>;
+
 	return (
 		<main>
 			<h1 className="text-2xl font-bold">소비자물가지수(CPI)</h1>
@@ -15,12 +20,10 @@ export default async function CpiPage() {
 					</ul>
 				</div>
 			</section>
-			<Button
-				href="/cpi/a"
-				className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
-			>
-				식료품 및 비주류음료
-			</Button>
+
+			<section className="mt-10">
+				<CpiTopLevelButtons data={hierarchy} />
+			</section>
 		</main>
 	);
 }
