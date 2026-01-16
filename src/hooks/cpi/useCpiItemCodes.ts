@@ -1,4 +1,4 @@
-type StatisticItem = {
+interface StatisticItem {
 	STAT_CODE: string;
 	STAT_NAME: string;
 	GRP_CODE: string;
@@ -13,22 +13,25 @@ type StatisticItem = {
 	DATA_CNT: number;
 	UNIT_NAME: string;
 	WEIGHT: string;
-};
+}
 
-type StatisticItemListResponse = {
+interface StatisticItemListResponse {
 	StatisticItemList: {
 		list_total_count: number;
 		row: StatisticItem[];
 	};
-};
+}
 
-export type CpiItemHierarchy = {
+export interface CpiItemHierarchy {
 	code: string;
 	name: string;
 	children: Record<string, CpiItemHierarchy>;
-};
+}
 
-export const useCpiItemCodes = async (statCode = '901Y009', rootItemCode = 'A'): Promise<CpiItemHierarchy | null> => {
+export const useCpiItemCodes = async (
+	statCode: string,
+	rootItemCode?: string,
+): Promise<CpiItemHierarchy | CpiItemHierarchy[] | null> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
@@ -37,35 +40,27 @@ export const useCpiItemCodes = async (statCode = '901Y009', rootItemCode = 'A'):
 		return null;
 	}
 
-	const rootCode = rootItemCode.trim();
-	if (!rootCode) {
-		console.error('rootItemCode is empty.');
-		return null;
-	}
-
-	const BATCH_SIZE = 100; // 더 큰 단위로
+	const BATCH_SIZE = 100;
 	let totalCount = 0;
 
 	try {
-		// 먼저 첫 페이지 요청해서 전체 개수 확인
+		// 첫 요청
 		const firstUrl = `${baseUrl}/StatisticItemList/${apiKey}/json/kr/1/${BATCH_SIZE}/${statCode}`;
-		const firstRes = await fetch(firstUrl, { next: { revalidate: 60 * 60 * 24 } });
-
+		const firstRes = await fetch(firstUrl, { next: { revalidate: 60 * 60 * 24 * 30 } });
 		if (!firstRes.ok) throw new Error('Failed to fetch initial data');
 
 		const firstData = (await firstRes.json()) as StatisticItemListResponse;
 		const allItems: StatisticItem[] = firstData?.StatisticItemList?.row ?? [];
 		totalCount = firstData?.StatisticItemList?.list_total_count ?? 0;
 
-		// 병렬 요청할 나머지 페이지 구성
+		// 나머지 요청
 		const remainingRequests: Promise<Response>[] = [];
 		for (let start = BATCH_SIZE + 1; start <= totalCount; start += BATCH_SIZE) {
 			const end = Math.min(start + BATCH_SIZE - 1, totalCount);
 			const url = `${baseUrl}/StatisticItemList/${apiKey}/json/kr/${start}/${end}/${statCode}`;
-			remainingRequests.push(fetch(url, { next: { revalidate: 60 * 60 * 24 } }));
+			remainingRequests.push(fetch(url, { next: { revalidate: 60 * 60 * 24 * 30 } }));
 		}
 
-		// 병렬 요청 실행
 		const responses = await Promise.all(remainingRequests);
 		for (const res of responses) {
 			if (!res.ok) continue;
@@ -74,53 +69,22 @@ export const useCpiItemCodes = async (statCode = '901Y009', rootItemCode = 'A'):
 			allItems.push(...rows);
 		}
 
-		// 필터: CYCLE === 'A' && ITEM_CODE 시작이 rootCode
-		const rootItems = allItems.filter((item) => item.CYCLE === 'A' && item.ITEM_CODE.startsWith(rootCode));
+		const filteredItems = allItems.filter((item) => item.CYCLE === 'A');
 
-		// 계층 구조 생성
-		const buildHierarchy = (parentCode: string | null): CpiItemHierarchy | null => {
-			if (parentCode === null) {
-				const topItem = rootItems.find((item) => item.ITEM_CODE === rootCode);
-				if (!topItem) return null;
-
-				const directChildren = rootItems.filter((item) => item.P_ITEM_CODE === rootCode);
-				const childHierarchy: Record<string, CpiItemHierarchy> = {};
-
-				for (const item of directChildren) {
-					const child = buildHierarchy(item.ITEM_CODE);
-					if (child) {
-						childHierarchy[item.ITEM_CODE] = child;
-					}
-				}
-
-				return {
-					code: topItem.ITEM_CODE,
-					name: topItem.ITEM_NAME,
-					children: childHierarchy,
-				};
-			}
-
-			const children = rootItems.filter((item) => item.P_ITEM_CODE === parentCode);
-			if (children.length === 0) {
-				const currentItem = rootItems.find((item) => item.ITEM_CODE === parentCode);
-				if (!currentItem) return null;
-				return {
-					code: currentItem.ITEM_CODE,
-					name: currentItem.ITEM_NAME,
-					children: {},
-				};
-			}
-
-			const childHierarchy: Record<string, CpiItemHierarchy> = {};
-			for (const item of children) {
-				const child = buildHierarchy(item.ITEM_CODE);
-				if (child) {
-					childHierarchy[item.ITEM_CODE] = child;
-				}
-			}
-
-			const currentItem = rootItems.find((item) => item.ITEM_CODE === parentCode);
+		// 계층 구조 생성 함수
+		const buildHierarchy = (parentCode: string): CpiItemHierarchy | null => {
+			const currentItem = filteredItems.find((item) => item.ITEM_CODE === parentCode);
 			if (!currentItem) return null;
+
+			const children = filteredItems.filter((item) => item.P_ITEM_CODE === parentCode);
+			const childHierarchy: Record<string, CpiItemHierarchy> = {};
+
+			for (const child of children) {
+				const childNode = buildHierarchy(child.ITEM_CODE);
+				if (childNode) {
+					childHierarchy[child.ITEM_CODE] = childNode;
+				}
+			}
 
 			return {
 				code: currentItem.ITEM_CODE,
@@ -129,7 +93,23 @@ export const useCpiItemCodes = async (statCode = '901Y009', rootItemCode = 'A'):
 			};
 		};
 
-		return buildHierarchy(null);
+		// rootItemCode가 제공된 경우
+		if (rootItemCode) {
+			const rootCode = rootItemCode.trim();
+			const root = buildHierarchy(rootCode);
+			return root;
+		}
+
+		// rootItemCode가 없는 경우: 최상위 노드들을 모두 계층 구조로 리턴
+		const topLevelItems = filteredItems.filter((item) => item.P_ITEM_CODE === null);
+		const hierarchies: CpiItemHierarchy[] = [];
+
+		for (const item of topLevelItems) {
+			const root = buildHierarchy(item.ITEM_CODE);
+			if (root) hierarchies.push(root);
+		}
+
+		return hierarchies;
 	} catch (error) {
 		console.error('Error while fetching CPI item codes:', error);
 		return null;

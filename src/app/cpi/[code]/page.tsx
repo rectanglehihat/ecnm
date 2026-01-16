@@ -4,32 +4,36 @@ import { Suspense } from 'react';
 import { useCpiItemCodes } from '@/hooks/cpi/useCpiItemCodes';
 import HierarchyButtons from '@/components/cpi/HierarchyButtons';
 
-interface APageProps {
+interface PageProps {
 	searchParams: Promise<{ code?: string; name?: string }>;
 }
 
-export default async function APage({ searchParams }: APageProps) {
-	const aHierarchy = await useCpiItemCodes('901Y009', 'A');
+export default async function Page({ searchParams }: PageProps) {
+	const hierarchy = await useCpiItemCodes('901Y009', 'A');
 	const params = await searchParams;
 
-	console.log('❤️ aHierarchy', aHierarchy);
-	console.log('🍑 params', params);
+	console.log('💚 hierarchy', hierarchy);
+	console.log('🥦 params', params);
 
-	if (!aHierarchy) return <div className="text-red-500">❌ 데이터 조회 실패</div>;
+	if (!hierarchy) return <div className="text-red-500">❌ 데이터 조회 실패</div>;
 
 	// 첫 번째 레벨: params.code가 있으면 해당 항목, 없으면 첫 번째 자식 사용
-	const parentCode = params.code || Object.keys(aHierarchy.children)[0];
-	const parentItem = aHierarchy.children[parentCode];
+	if (!('children' in hierarchy) || !hierarchy.children || typeof hierarchy.children !== 'object') {
+		return <div className="text-red-500">❌ 계층 데이터 구조 오류</div>;
+	}
+	const childKeys = Object.keys(hierarchy.children);
+	const parentCode = params.code && params.code in hierarchy.children ? params.code : childKeys[0];
+	const parentItem = hierarchy.children[parentCode];
 
 	if (!parentItem) return <div className="text-red-500">❌ 카테고리 데이터 조회 실패</div>;
 
-	console.log('!!!!!! parentCode', parentCode);
-	console.log('!!!!!! parentItem', parentItem);
+	console.log('🥝 parentCode', parentCode);
+	console.log('🌲 parentItem', parentItem);
 
 	return (
 		<>
-			<h1 className="text-2xl font-bold">{aHierarchy.name}</h1>
-			<HierarchyButtons children={aHierarchy.children} />
+			<h1 className="text-2xl font-bold">{hierarchy.name}</h1>
+			<HierarchyButtons children={hierarchy.children} />
 
 			{Object.values(parentItem.children).map((childItem) => {
 				const childItemCodes = childItem.children ? Object.values(childItem.children).map((item) => item.code) : [];
