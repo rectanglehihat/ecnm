@@ -57,4 +57,5 @@ const ChartSkeleton = () => {
 	);
 };
 
+ChartSkeleton.displayName = 'ChartSkeleton';
 export default ChartSkeleton;

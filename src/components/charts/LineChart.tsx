@@ -214,4 +214,5 @@ const LineChart = ({
 	);
 };
 
+LineChart.displayName = 'LineChart';
 export default memo(LineChart);

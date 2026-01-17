@@ -78,4 +78,5 @@ const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.',
 	);
 };
 
+CpiChart.displayName = 'CpiChart';
 export default CpiChart;

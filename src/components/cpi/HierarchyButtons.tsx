@@ -47,4 +47,5 @@ const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
 	);
 };
 
+HierarchyButtons.displayName = 'HierarchyButtons';
 export default HierarchyButtons;
