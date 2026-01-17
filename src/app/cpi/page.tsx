@@ -1,4 +1,4 @@
-import { CpiTopLevelButtons } from '@/components/cpi/CpiTopLevelButtons';
+import CpiTopLevelButtons from '@/components/cpi/CpiTopLevelButtons';
 import { useCpiItemCodes } from '@/hooks/cpi/useCpiItemCodes';
 
 export default async function CpiPage() {
@@ -27,3 +27,5 @@ export default async function CpiPage() {
 		</main>
 	);
 }
+
+CpiPage.displayName = 'CpiPage';

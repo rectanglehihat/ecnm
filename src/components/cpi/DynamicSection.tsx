@@ -26,4 +26,5 @@ const DynamicSection = async ({ itemCodes, name }: DynamicSectionProps) => {
 	);
 };
 
+DynamicSection.displayName = 'DynamicSection';
 export default DynamicSection;

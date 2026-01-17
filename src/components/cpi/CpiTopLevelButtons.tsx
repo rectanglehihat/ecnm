@@ -7,7 +7,7 @@ type Props = {
 	data: CpiItemHierarchy | CpiItemHierarchy[];
 };
 
-export const CpiTopLevelButtons = ({ data }: Props) => {
+const CpiTopLevelButtons = ({ data }: Props) => {
 	const topLevelNodes = Array.isArray(data)
 		? data.flatMap((node) => Object.values(node.children))
 		: Object.values(data.children);
@@ -29,3 +29,6 @@ export const CpiTopLevelButtons = ({ data }: Props) => {
 		</div>
 	);
 };
+
+CpiTopLevelButtons.displayName = 'CpiTopLevelButtons';
+export default CpiTopLevelButtons;
