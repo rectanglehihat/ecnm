@@ -21,7 +21,7 @@ export default async function CpiPage() {
 				</div>
 			</section>
 
-			<section className="mt-10">
+			<section>
 				<CpiTopLevelButtons data={hierarchy} />
 			</section>
 		</main>
