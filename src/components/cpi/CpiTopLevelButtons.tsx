@@ -19,8 +19,7 @@ const CpiTopLevelButtons = ({ data }: Props) => {
 			{topLevelNodes.map((node) => (
 				<Button
 					key={node.code}
-					href={`/cpi/${node.code}`}
-					// href={`/cpi/${node.code}?name=${node.name}`}
+					href={`/cpi/${node.code}?code=${Object.values(node.children ?? {})[0]?.code ?? ''}&name=${node.name}`}
 					className="h-fit w-fit rounded-full bg-foreground px-6 py-2 text-background text-md hover:bg-[#383838] dark:hover:bg-[#ccc]"
 				>
 					{node.name}
