@@ -14,7 +14,6 @@ const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
 	const selectedCode = searchParams.get('code');
 
 	const handleClick = (child: CpiItemHierarchy) => {
-		console.log('child', child);
 		const params = new URLSearchParams(searchParams.toString());
 
 		if (selectedCode === child.code) {
