@@ -46,7 +46,7 @@ const useCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Recor
 	const promises = itemCodes.map(async (itemCode) => {
 		try {
 			const url = `${baseUrl}/StatisticSearch/${apiKey}/json/kr/1/100/${statCode}/${cycle}/${startTime}/${endTime}/${itemCode}`;
-			const res = await fetch(url, { next: { revalidate: 3600 } });
+			const res = await fetch(url, { next: { revalidate: 60 * 60 * 24 * 30 } });
 
 			if (!res.ok) {
 				console.error(`한국은행 Open API 호출 실패 (${itemCode})`, res.status, res.statusText);
