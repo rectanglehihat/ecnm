@@ -28,7 +28,7 @@ export interface CpiItemHierarchy {
 	children: Record<string, CpiItemHierarchy>;
 }
 
-export const useCpiItemCodes = async (
+export const fetchCpiItemCodes = async (
 	statCode: string,
 	rootItemCode?: string,
 ): Promise<CpiItemHierarchy | CpiItemHierarchy[] | null> => {

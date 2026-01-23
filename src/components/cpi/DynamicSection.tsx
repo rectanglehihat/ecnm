@@ -1,5 +1,5 @@
-import useCpiStatistics from '@/hooks/cpi/useCpiStatistics';
 import CpiChart from '@/components/cpi/CpiChart';
+import fetchCpiStatistics from '@/lib/cpi/fetchCpiStatistics';
 
 interface DynamicSectionProps {
 	itemCodes: string[];
@@ -7,7 +7,7 @@ interface DynamicSectionProps {
 }
 
 const DynamicSection = async ({ itemCodes, name }: DynamicSectionProps) => {
-	const stats = await useCpiStatistics(itemCodes);
+	const stats = await fetchCpiStatistics(itemCodes);
 
 	if (Object.keys(stats).length === 0) {
 		return (
