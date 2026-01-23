@@ -26,7 +26,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 	return (
 		<>
 			<h1 className="text-2xl font-bold">{hierarchy.name}</h1>
-			<HierarchyButtons children={hierarchy.children} />
+			<HierarchyButtons>{hierarchy.children}</HierarchyButtons>
 
 			{Object.values(parentItem.children).map((childItem) => {
 				const childItemCodes = childItem.children ? Object.values(childItem.children).map((item) => item.code) : [];
