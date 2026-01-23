@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { LineChart } from '@/components/charts';
 import type { LineConfig, ChartDataPoint } from '@/components/charts';
 import { CHART_COLORS } from '@/const/CHART_COLORS';
@@ -20,9 +20,9 @@ type CpiChartProps = {
 
 const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.', height = '24rem' }: CpiChartProps) => {
 	// itemCode를 기반으로 일관된 색상 인덱스 생성
-	const getColorIndex = (code: string) => {
+	const getColorIndex = useCallback((code: string) => {
 		return code.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % CHART_COLORS.length;
-	};
+	}, []);
 
 	// 모든 연도를 수집 및 정렬
 	const sortedYears = useMemo(() => {
