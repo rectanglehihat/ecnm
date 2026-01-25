@@ -54,7 +54,6 @@ const fetchCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Rec
 			}
 
 			const data = (await res.json()) as StatisticSearchResponse;
-			console.log(`🌼 StatisticSearch data for ${itemCode}`, data);
 
 			return { itemCode, data: data.StatisticSearch?.row ?? [] };
 		} catch (error) {
