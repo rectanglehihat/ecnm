@@ -26,7 +26,7 @@ type StatisticSearchResponse = {
  * 한국은행 Open API의 통계조회 조건 설정 API를 사용하여 통계 항목을 검색합니다.
  * @param itemCodes 통계항목코드 배열 또는 단일 코드
  */
-const useCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Record<string, StatisticSearchItem[]>> => {
+const fetchCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Record<string, StatisticSearchItem[]>> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
@@ -54,7 +54,6 @@ const useCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Recor
 			}
 
 			const data = (await res.json()) as StatisticSearchResponse;
-			console.log(`🌼 StatisticSearch data for ${itemCode}`, data);
 
 			return { itemCode, data: data.StatisticSearch?.row ?? [] };
 		} catch (error) {
@@ -81,4 +80,4 @@ const useCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Recor
 	return result;
 };
 
-export default useCpiStatistics;
+export default fetchCpiStatistics;

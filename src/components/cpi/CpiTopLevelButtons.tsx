@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/components/ui/Button';
-import { CpiItemHierarchy } from '@/hooks/cpi/useCpiItemCodes';
+import { CpiItemHierarchy } from '@/lib/cpi/fetchCpiItemCodes';
 
 type Props = {
 	data: CpiItemHierarchy | CpiItemHierarchy[];

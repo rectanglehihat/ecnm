@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/ui/Button';
-import type { CpiItemHierarchy } from '@/hooks/cpi/useCpiItemCodes';
+import type { CpiItemHierarchy } from '@/lib/cpi/fetchCpiItemCodes';
 
 interface HierarchyButtonsProps {
 	children: Record<string, CpiItemHierarchy>;
