@@ -3,6 +3,7 @@ import { fetchCpiItemCodes } from '@/lib/cpi/fetchCpiItemCodes';
 
 export default async function CpiPage() {
 	const hierarchy = await fetchCpiItemCodes('901Y009');
+	console.log('hierarchy', hierarchy);
 
 	if (!hierarchy) return <div className="text-red-500">❌ 데이터 조회 실패</div>;
 
