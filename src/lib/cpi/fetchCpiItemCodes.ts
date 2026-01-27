@@ -1,3 +1,5 @@
+import { ApiError, DataError, NetworkError, handleError } from '@/lib/errors';
+
 interface StatisticItem {
 	STAT_CODE: string;
 	STAT_NAME: string;
@@ -36,8 +38,12 @@ export const fetchCpiItemCodes = async (
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
 	if (!apiKey || !baseUrl) {
-		console.error('API key or base URL is missing.');
-		return null;
+		throw new DataError('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.', {
+			location: 'fetchCpiItemCodes',
+			userMessage: 'API 설정이 올바르지 않습니다. 관리자에게 문의하세요.',
+			retryable: false,
+			metadata: { missingKey: !apiKey, missingUrl: !baseUrl },
+		});
 	}
 
 	const BATCH_SIZE = 100;
@@ -47,11 +53,28 @@ export const fetchCpiItemCodes = async (
 		// 첫 요청
 		const firstUrl = `${baseUrl}/StatisticItemList/${apiKey}/json/kr/1/${BATCH_SIZE}/${statCode}`;
 		const firstRes = await fetch(firstUrl, { next: { revalidate: 60 * 60 * 24 * 30 } });
-		if (!firstRes.ok) throw new Error('Failed to fetch initial data');
+
+		if (!firstRes.ok) {
+			throw new ApiError('CPI 항목 코드 초기 데이터 조회 실패', firstRes.status, {
+				location: 'fetchCpiItemCodes',
+				userMessage: 'CPI 항목 데이터를 불러올 수 없습니다.',
+				retryable: firstRes.status >= 500,
+				metadata: { url: firstUrl, status: firstRes.status },
+			});
+		}
 
 		const firstData = (await firstRes.json()) as StatisticItemListResponse;
-		const allItems: StatisticItem[] = firstData?.StatisticItemList?.row ?? [];
-		totalCount = firstData?.StatisticItemList?.list_total_count ?? 0;
+
+		if (!firstData?.StatisticItemList?.row) {
+			throw new DataError('응답 데이터 형식이 올바르지 않습니다.', {
+				location: 'fetchCpiItemCodes',
+				userMessage: '데이터 형식이 올바르지 않습니다.',
+				metadata: { url: firstUrl },
+			});
+		}
+
+		const allItems: StatisticItem[] = firstData.StatisticItemList.row;
+		totalCount = firstData.StatisticItemList.list_total_count ?? 0;
 
 		// 나머지 요청
 		const remainingRequests: Promise<Response>[] = [];
@@ -63,10 +86,26 @@ export const fetchCpiItemCodes = async (
 
 		const responses = await Promise.all(remainingRequests);
 		for (const res of responses) {
-			if (!res.ok) continue;
-			const data = (await res.json()) as StatisticItemListResponse;
-			const rows = data?.StatisticItemList?.row ?? [];
-			allItems.push(...rows);
+			if (!res.ok) {
+				handleError(
+					new ApiError('CPI 항목 코드 추가 데이터 조회 실패', res.status, {
+						location: 'fetchCpiItemCodes',
+						userMessage: '일부 CPI 항목 데이터를 불러올 수 없습니다.',
+						retryable: res.status >= 500,
+						metadata: { url: res.url, status: res.status },
+					}),
+					'fetchCpiItemCodes',
+				);
+				continue;
+			}
+
+			try {
+				const data = (await res.json()) as StatisticItemListResponse;
+				const rows = data?.StatisticItemList?.row ?? [];
+				allItems.push(...rows);
+			} catch (error) {
+				handleError(error, 'fetchCpiItemCodes:parseResponse');
+			}
 		}
 
 		const filteredItems = allItems.filter((item) => item.CYCLE === 'A');
@@ -111,7 +150,7 @@ export const fetchCpiItemCodes = async (
 
 		return hierarchies;
 	} catch (error) {
-		console.error('Error while fetching CPI item codes:', error);
-		return null;
+		// 에러 처리 및 재throw
+		throw handleError(error, 'fetchCpiItemCodes');
 	}
 };

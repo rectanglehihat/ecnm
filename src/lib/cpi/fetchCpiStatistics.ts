@@ -1,3 +1,5 @@
+import { ApiError, DataError, handleError } from '@/lib/errors';
+
 type StatisticSearchItem = {
 	DATA_VALUE: string;
 	ITEM_CODE1: string;
@@ -36,8 +38,12 @@ const fetchCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Rec
 	const endTime = '2024';
 
 	if (!apiKey || !baseUrl) {
-		console.error('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.');
-		return {};
+		throw new DataError('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.', {
+			location: 'fetchCpiStatistics',
+			userMessage: 'API 설정이 올바르지 않습니다. 관리자에게 문의하세요.',
+			retryable: false,
+			metadata: { missingKey: !apiKey, missingUrl: !baseUrl },
+		});
 	}
 
 	const result: Record<string, StatisticSearchItem[]> = {};
@@ -49,15 +55,32 @@ const fetchCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Rec
 			const res = await fetch(url, { next: { revalidate: 60 * 60 * 24 * 30 } });
 
 			if (!res.ok) {
-				console.error(`한국은행 Open API 호출 실패 (${itemCode})`, res.status, res.statusText);
+				const error = new ApiError(`한국은행 Open API 호출 실패 (${itemCode})`, res.status, {
+					location: 'fetchCpiStatistics',
+					userMessage: 'CPI 통계 데이터를 불러올 수 없습니다.',
+					retryable: res.status >= 500,
+					metadata: { itemCode, url, status: res.status, statusText: res.statusText },
+				});
+				handleError(error, 'fetchCpiStatistics');
 				return { itemCode, data: [] };
 			}
 
 			const data = (await res.json()) as StatisticSearchResponse;
 
-			return { itemCode, data: data.StatisticSearch?.row ?? [] };
+			if (!data.StatisticSearch?.row) {
+				const error = new DataError(`응답 데이터 형식이 올바르지 않습니다 (${itemCode})`, {
+					location: 'fetchCpiStatistics',
+					userMessage: '데이터 형식이 올바르지 않습니다.',
+					metadata: { itemCode },
+				});
+				handleError(error, 'fetchCpiStatistics');
+				return { itemCode, data: [] };
+			}
+
+			return { itemCode, data: data.StatisticSearch.row };
 		} catch (error) {
-			console.error(`API 호출 중 오류 발생 (${itemCode}):`, error);
+			const handledError = handleError(error, `fetchCpiStatistics:${itemCode}`);
+			// 에러가 발생해도 빈 배열을 반환하여 다른 항목들은 계속 처리
 			return { itemCode, data: [] };
 		}
 	});
@@ -72,7 +95,7 @@ const fetchCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Rec
 		if (promiseResult.status === 'fulfilled') {
 			result[itemCode] = promiseResult.value.data;
 		} else {
-			console.error(`Promise rejected for ${itemCode}:`, promiseResult.reason);
+			const error = handleError(promiseResult.reason, `fetchCpiStatistics:${itemCode}`);
 			result[itemCode] = [];
 		}
 	});

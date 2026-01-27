@@ -1,11 +1,20 @@
 import CpiTopLevelButtons from '@/components/cpi/CpiTopLevelButtons';
 import { fetchCpiItemCodes } from '@/lib/cpi/fetchCpiItemCodes';
+import { handleError } from '@/lib/errors';
 
 export default async function CpiPage() {
-	const hierarchy = await fetchCpiItemCodes('901Y009');
-	console.log('hierarchy', hierarchy);
+	let hierarchy;
 
-	if (!hierarchy) return <div className="text-red-500">❌ 데이터 조회 실패</div>;
+	try {
+		hierarchy = await fetchCpiItemCodes('901Y009');
+	} catch (error) {
+		// 에러가 발생하면 Next.js의 error.tsx로 전파
+		throw handleError(error, 'CpiPage');
+	}
+
+	if (!hierarchy) {
+		return <div className="text-red-500">❌ 데이터 조회 실패</div>;
+	}
 
 	return (
 		<main>
