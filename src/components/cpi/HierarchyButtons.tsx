@@ -29,11 +29,11 @@ const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
 
 	return (
 		<>
-			<div className="flex flex-wrap gap-2">
+			<div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
 				{Object.values(children || {}).map((child) => (
 					<Button
 						key={child.code}
-						className={`cursor-pointer flex h-12 w-fit items-center justify-center gap-2 rounded-full px-5 text-background transition-colors font-semibold md:w-[158px] ${
+						className={`cursor-pointer flex h-11 w-full items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-background transition-colors sm:h-12 sm:px-5 sm:text-base ${
 							selectedCode === child.code ? 'bg-[#383838] dark:bg-[#ccc]' : 'bg-gray-300 text-gray-700'
 						}`}
 						onClick={() => handleClick(child)}

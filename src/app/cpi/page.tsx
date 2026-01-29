@@ -17,10 +17,10 @@ export default async function CpiPage() {
 	}
 
 	return (
-		<main>
-			<h1 className="text-2xl font-bold">소비자물가지수(CPI)</h1>
-			<section className="py-10">
-				<div className="p-5 text-sm text-gray-600 flex flex-col gap-2 bg-gray-200 rounded-lg">
+		<main className="space-y-8">
+			<h1 className="text-xl font-bold sm:text-2xl">소비자물가지수(CPI)</h1>
+			<section className="py-6 sm:py-10">
+				<div className="flex flex-col gap-2 rounded-lg bg-gray-200 p-4 text-sm text-gray-600 sm:p-5 sm:text-base">
 					<p className="font-semibold">🍎 2020=100</p>
 					<ul className="list-disc list-inside">
 						<li>기준연도: 2020년</li>
