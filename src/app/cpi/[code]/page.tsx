@@ -52,8 +52,8 @@ export default async function Page({ params, searchParams }: PageProps) {
 	}
 
 	return (
-		<>
-			<h1 className="text-2xl font-bold">{hierarchy.name}</h1>
+		<main className="space-y-6">
+			<h1 className="text-xl font-bold sm:text-2xl">{hierarchy.name}</h1>
 			<HierarchyButtons>{hierarchy.children}</HierarchyButtons>
 
 			{Object.values(parentItem.children).map((childItem) => {
@@ -78,7 +78,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 					</Suspense>
 				);
 			})}
-		</>
+		</main>
 	);
 }
 

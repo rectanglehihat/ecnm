@@ -15,12 +15,12 @@ const CpiTopLevelButtons = ({ data }: Props) => {
 	if (!topLevelNodes.length) return null;
 
 	return (
-		<div className="flex flex-wrap gap-3">
+		<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
 			{topLevelNodes.map((node) => (
 				<Button
 					key={node.code}
 					href={`/cpi/${node.code}?code=${Object.values(node.children ?? {})[0]?.code ?? ''}&name=${node.name}`}
-					className="h-fit w-fit rounded-full bg-foreground px-6 py-2 text-background text-md hover:bg-[#383838] dark:hover:bg-[#ccc]"
+					className="flex h-auto w-full items-center justify-center rounded-full bg-foreground px-4 py-2.5 text-sm text-background hover:bg-[#383838] dark:hover:bg-[#ccc] sm:px-6 sm:text-base"
 				>
 					{node.name}
 				</Button>
