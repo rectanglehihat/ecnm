@@ -3,7 +3,7 @@ import Button from '@/components/ui/Button';
 export default async function Home() {
 	return (
 		<div className="font-sans dark:bg-black">
-			<main className="flex w-full max-w-3xl flex-col items-center justify-between gap-6 bg-white px-4 dark:bg-black sm:items-start sm:px-8 lg:px-16">
+			<main className="flex w-full max-w-3xl flex-col items-center justify-between gap-6 px-4 dark:bg-black sm:items-start sm:px-8 lg:px-16">
 				<div className="flex flex-col items-center text-center sm:items-start sm:text-left">
 					<h1 className="max-w-xs text-2xl font-semibold leading-9 tracking-tight text-black dark:text-zinc-50 sm:text-3xl sm:leading-10">
 						ECNM
