@@ -13,7 +13,7 @@ const Button = ({ href, className = '', children, ...props }: ButtonProps) => {
 		return (
 			<Link
 				href={href}
-				className={className}
+				className={`retro-button ${className}`}
 			>
 				{children}
 			</Link>
@@ -22,7 +22,7 @@ const Button = ({ href, className = '', children, ...props }: ButtonProps) => {
 
 	return (
 		<button
-			className={className}
+			className={`retro-button ${className}`}
 			{...props}
 		>
 			{children}

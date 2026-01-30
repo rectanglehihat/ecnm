@@ -1,8 +1,13 @@
 @import 'tailwindcss';
 
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
+	--background: #fff7d6;
+	--foreground: #1b1b1b;
+	--retro-ink: #1b1b1b;
+	--retro-paper: #fff7d6;
+	--retro-accent: #ff7a00;
+	--retro-accent-2: #16a3ff;
+	--retro-shadow: rgba(27, 27, 27, 0.85);
 }
 
 @theme inline {
@@ -14,15 +19,64 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
+		--background: #0b0f1f;
+		--foreground: #f5f3ff;
+		--retro-ink: #f5f3ff;
+		--retro-paper: #0b0f1f;
+		--retro-accent: #ffb347;
+		--retro-accent-2: #3dd5ff;
+		--retro-shadow: rgba(0, 0, 0, 0.8);
 	}
 }
 
 body {
-	background: var(--background);
-	color: var(--foreground);
-	font-family: Arial, Helvetica, sans-serif;
+	background-color: var(--retro-paper);
+	color: var(--retro-ink);
+	font-family: var(--font-geist-mono), var(--font-geist-sans), 'Courier New', monospace;
+	background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.05), transparent 20%),
+		repeating-linear-gradient(
+			0deg,
+			rgba(0, 0, 0, 0.06) 0px,
+			rgba(0, 0, 0, 0.06) 1px,
+			transparent 1px,
+			transparent 4px
+		);
+	background-attachment: fixed;
+}
+
+::selection {
+	background: var(--retro-accent);
+	color: #0b0f1f;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: 0.02em;
+}
+
+.retro-panel {
+	border: 2px solid var(--retro-ink);
+	box-shadow: 4px 4px 0 var(--retro-shadow);
+	background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+}
+
+.retro-button {
+	border: 2px solid var(--retro-ink);
+	box-shadow: 3px 3px 0 var(--retro-shadow);
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.retro-button:hover {
+	transform: translate(-1px, -1px);
+	box-shadow: 4px 4px 0 var(--retro-shadow);
+}
+
+.retro-button:active {
+	transform: translate(1px, 1px);
+	box-shadow: 1px 1px 0 var(--retro-shadow);
 }
 
 /* Skeleton loading animations */

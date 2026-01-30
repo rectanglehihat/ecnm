@@ -48,7 +48,7 @@ const Header = () => {
 
 	return (
 		<header className="fixed top-0 left-0 right-0 z-50">
-			<nav className="mx-auto flex w-full max-w-6xl items-center justify-between border border-zinc-200 bg-white px-4 py-4 shadow-sm transition-colors dark:border-zinc-800 dark:bg-zinc-900">
+			<nav className="retro-panel mx-auto flex w-full max-w-6xl items-center justify-between border border-zinc-200 bg-white px-4 py-4 shadow-sm transition-colors dark:border-zinc-800 dark:bg-zinc-900">
 				<Link
 					href="/"
 					aria-label="메인 페이지로 이동"
