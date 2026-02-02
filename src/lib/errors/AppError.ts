@@ -11,10 +11,6 @@ export enum ErrorType {
 	NETWORK = 'NETWORK',
 	/** 유효성 검증 에러 */
 	VALIDATION = 'VALIDATION',
-	/** 인증 에러 */
-	AUTHENTICATION = 'AUTHENTICATION',
-	/** 권한 에러 */
-	AUTHORIZATION = 'AUTHORIZATION',
 	/** 알 수 없는 에러 */
 	UNKNOWN = 'UNKNOWN',
 }
@@ -108,10 +104,6 @@ export class AppError extends Error {
 				return '네트워크 연결을 확인해 주세요.';
 			case ErrorType.VALIDATION:
 				return '입력한 정보가 올바르지 않습니다.';
-			case ErrorType.AUTHENTICATION:
-				return '인증이 필요합니다. 다시 로그인해 주세요.';
-			case ErrorType.AUTHORIZATION:
-				return '접근 권한이 없습니다.';
 			default:
 				return '예상치 못한 오류가 발생했습니다.';
 		}
