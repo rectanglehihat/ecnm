@@ -19,6 +19,12 @@ export default async function Home() {
 					>
 						소비자물가지수
 					</Button>
+					<Button
+						href="/ppi"
+						className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] sm:w-fit md:w-[158px]"
+					>
+						부동산가격지수
+					</Button>
 				</div>
 			</main>
 		</div>
