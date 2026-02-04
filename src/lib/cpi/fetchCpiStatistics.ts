@@ -1,6 +1,6 @@
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
-type StatisticSearchItem = {
+interface StatisticSearchItem {
 	DATA_VALUE: string;
 	ITEM_CODE1: string;
 	ITEM_CODE2: string | null;
@@ -15,14 +15,14 @@ type StatisticSearchItem = {
 	TIME: string;
 	UNIT_NAME: string;
 	WGT: string;
-};
+}
 
-type StatisticSearchResponse = {
+interface StatisticSearchResponse {
 	StatisticSearch: {
 		list_total_count: number;
 		row: StatisticSearchItem[];
 	};
-};
+}
 
 /**
  * 한국은행 Open API의 통계조회 조건 설정 API를 사용하여 통계 항목을 검색합니다.
