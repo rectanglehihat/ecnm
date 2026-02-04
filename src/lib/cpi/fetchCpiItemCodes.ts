@@ -1,6 +1,6 @@
 import { ApiError, DataError, NetworkError, handleError } from '@/lib/errors';
 
-interface StatisticItem {
+export interface StatisticItem {
 	STAT_CODE: string;
 	STAT_NAME: string;
 	GRP_CODE: string;
@@ -17,7 +17,7 @@ interface StatisticItem {
 	WEIGHT: string;
 }
 
-interface StatisticItemListResponse {
+export interface StatisticItemListResponse {
 	StatisticItemList: {
 		list_total_count: number;
 		row: StatisticItem[];

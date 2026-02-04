@@ -1,6 +1,6 @@
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
-interface StatisticSearchItem {
+export interface StatisticSearchItem {
 	DATA_VALUE: string;
 	ITEM_CODE1: string;
 	ITEM_CODE2: string | null;
@@ -17,7 +17,7 @@ interface StatisticSearchItem {
 	WGT: string;
 }
 
-interface StatisticSearchResponse {
+export interface StatisticSearchResponse {
 	StatisticSearch: {
 		list_total_count: number;
 		row: StatisticSearchItem[];
