@@ -5,18 +5,18 @@ import { LineChart } from '@/components/charts';
 import type { LineConfig, ChartDataPoint } from '@/components/charts';
 import { CHART_COLORS } from '@/const/CHART_COLORS';
 
-type StatisticItem = {
+interface StatisticItem {
 	DATA_VALUE: string;
 	TIME: string;
 	ITEM_NAME1: string;
 	UNIT_NAME: string;
-};
+}
 
-type CpiChartProps = {
+interface CpiChartProps {
 	data: Record<string, StatisticItem[]>;
 	emptyMessage?: string;
 	height?: string;
-};
+}
 
 const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.', height = '24rem' }: CpiChartProps) => {
 	// itemCode를 기반으로 일관된 색상 인덱스 생성

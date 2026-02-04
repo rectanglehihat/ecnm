@@ -3,9 +3,9 @@
 import Button from '@/components/ui/Button';
 import { CpiItemHierarchy } from '@/lib/cpi/fetchCpiItemCodes';
 
-type Props = {
+interface Props {
 	data: CpiItemHierarchy | CpiItemHierarchy[];
-};
+}
 
 const CpiTopLevelButtons = ({ data }: Props) => {
 	const topLevelNodes = Array.isArray(data)
