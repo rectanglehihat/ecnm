@@ -1,21 +1,20 @@
-import CpiTopLevelButtons from '@/components/cpi/CpiTopLevelButtons';
-import { fetchCpiItemCodes } from '@/lib/cpi/fetchCpiItemCodes';
+import PpiTopLevelButtons from '@/components/ppi/PpiTopLevelButtons';
+import { fetchPpiItemCodes } from '@/lib/cpi/fetchPpiItemCodes';
 import { handleError } from '@/lib/errors';
 
 export default async function PpiPage() {
-	let hierarchy;
+	let ppiItemCodes;
 
 	try {
-		hierarchy = await fetchCpiItemCodes('901Y113');
+		ppiItemCodes = await fetchPpiItemCodes('901Y113');
 	} catch (error) {
 		// 에러가 발생하면 Next.js의 error.tsx로 전파
 		throw handleError(error, 'PpiPage');
 	}
 
-	if (!hierarchy) {
+	if (!ppiItemCodes) {
 		return <div className="text-red-500">❌ 데이터 조회 실패</div>;
 	}
-	console.log('222 hierarchy', hierarchy);
 
 	return (
 		<main className="space-y-8">
@@ -27,7 +26,7 @@ export default async function PpiPage() {
 			</section>
 
 			<section>
-				<CpiTopLevelButtons data={hierarchy} />
+				<PpiTopLevelButtons data={ppiItemCodes} />
 			</section>
 		</main>
 	);
