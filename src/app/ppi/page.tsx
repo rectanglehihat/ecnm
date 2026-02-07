@@ -1,5 +1,5 @@
 import PpiTopLevelButtons from '@/components/ppi/PpiTopLevelButtons';
-import { fetchPpiItemCodes } from '@/lib/cpi/fetchPpiItemCodes';
+import { fetchPpiItemCodes } from '@/lib/ppi/fetchPpiItemCodes';
 import { handleError } from '@/lib/errors';
 
 export default async function PpiPage() {
