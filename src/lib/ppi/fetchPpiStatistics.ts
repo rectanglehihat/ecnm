@@ -12,12 +12,10 @@ const fetchPpiStatistics = async (
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
-	console.log('PPPPPPPP itemCodes', itemCodes);
-
-	const statCode = '901Y113';
+	const statCode = '901Y093';
 	const cycle = 'M';
 	const startTime = '195001';
-	const endTime = '202404';
+	const endTime = '202512';
 
 	if (!apiKey || !baseUrl) {
 		throw new DataError('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.', {
