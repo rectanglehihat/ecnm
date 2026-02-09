@@ -1,7 +1,16 @@
 import { StatisticItem, StatisticItemListResponse } from '@/lib/cpi/fetchCpiItemCodes';
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
-export const fetchPpiItemCodes = async (statCode: string, rootItemCode?: string): Promise<StatisticItem[] | null> => {
+export interface PpiItemHierarchy {
+	code: string;
+	name: string;
+	children: StatisticItem[];
+}
+
+export const fetchPpiItemCodes = async (
+	statCode: string,
+	rootItemCode?: string,
+): Promise<PpiItemHierarchy[] | null> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
@@ -76,12 +85,34 @@ export const fetchPpiItemCodes = async (statCode: string, rootItemCode?: string)
 			}
 		}
 
-		const parentItems = allItems.filter((item) => item.ITEM_CODE.startsWith('H'));
-		const childItems = allItems.filter((item) => item.ITEM_CODE.startsWith('R'));
-		console.log('----- parentItems', parentItems);
-		console.log('----- childItems', childItems);
+		const filteredItems = allItems.filter((item) => item.CYCLE === 'M');
 
-		return parentItems;
+		const buildPpiHierarchy = (items: StatisticItem[]): PpiItemHierarchy[] => {
+			const acc = items.reduce<{ parents: PpiItemHierarchy[]; children: StatisticItem[] }>(
+				(acc, item) => {
+					if (item.ITEM_CODE.startsWith('R')) {
+						acc.children.push(item);
+					}
+
+					if (item.ITEM_CODE.startsWith('H')) {
+						acc.parents.push({
+							code: item.ITEM_CODE,
+							name: item.ITEM_NAME,
+							children: acc.children,
+						});
+					}
+
+					return acc;
+				},
+				{ parents: [], children: [] },
+			);
+
+			return acc.parents;
+		};
+
+		const hierarchies = buildPpiHierarchy(filteredItems);
+
+		return hierarchies;
 	} catch (error) {
 		// 에러 처리 및 재throw
 		throw handleError(error, 'fetchPpiItemCodes');

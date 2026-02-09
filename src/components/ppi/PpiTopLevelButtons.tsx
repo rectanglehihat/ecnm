@@ -1,10 +1,10 @@
 'use client';
 
 import Button from '@/components/ui/Button';
-import { StatisticItem } from '@/lib/cpi/fetchCpiItemCodes';
+import { PpiItemHierarchy } from '@/lib/ppi/fetchPpiItemCodes';
 
 type Props = {
-	data: StatisticItem[];
+	data: PpiItemHierarchy[];
 };
 
 const PpiTopLevelButtons = ({ data }: Props) => {
@@ -14,11 +14,11 @@ const PpiTopLevelButtons = ({ data }: Props) => {
 		<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
 			{data.map((node) => (
 				<Button
-					key={node.ITEM_CODE}
-					href={`/cpi/${node.ITEM_CODE}?name=${node.ITEM_NAME}`}
+					key={node.code}
+					href={`/ppi/${node.code}?code=${Object.values(node.children ?? {})[0]?.ITEM_CODE ?? ''}&name=${node.name}`}
 					className="flex h-auto w-full items-center justify-center rounded-full bg-foreground px-4 py-2.5 text-sm text-background hover:bg-[#383838] dark:hover:bg-[#ccc] sm:px-6 sm:text-base"
 				>
-					{node.ITEM_NAME}
+					{node.name}
 				</Button>
 			))}
 		</div>

@@ -3,16 +3,16 @@ import { fetchPpiItemCodes } from '@/lib/ppi/fetchPpiItemCodes';
 import { handleError } from '@/lib/errors';
 
 export default async function PpiPage() {
-	let ppiItemCodes;
+	let hierarchy;
 
 	try {
-		ppiItemCodes = await fetchPpiItemCodes('901Y113');
+		hierarchy = await fetchPpiItemCodes('901Y113');
 	} catch (error) {
 		// 에러가 발생하면 Next.js의 error.tsx로 전파
 		throw handleError(error, 'PpiPage');
 	}
 
-	if (!ppiItemCodes) {
+	if (!hierarchy) {
 		return <div className="text-red-500">❌ 데이터 조회 실패</div>;
 	}
 
@@ -26,7 +26,7 @@ export default async function PpiPage() {
 			</section>
 
 			<section>
-				<PpiTopLevelButtons data={ppiItemCodes} />
+				<PpiTopLevelButtons data={hierarchy} />
 			</section>
 		</main>
 	);
