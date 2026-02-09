@@ -3,9 +3,10 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import type { CpiItemHierarchy } from '@/lib/cpi/fetchCpiItemCodes';
+import { PpiItemHierarchy } from '@/lib/ppi/fetchPpiItemCodes';
 
 interface HierarchyButtonsProps {
-	children: Record<string, CpiItemHierarchy>;
+	children: Record<string, CpiItemHierarchy> | PpiItemHierarchy[];
 }
 
 const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
