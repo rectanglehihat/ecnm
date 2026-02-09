@@ -6,7 +6,7 @@ export default async function PpiPage() {
 	let hierarchy;
 
 	try {
-		hierarchy = await fetchPpiItemCodes('901Y113');
+		hierarchy = await fetchPpiItemCodes('901Y093');
 	} catch (error) {
 		// 에러가 발생하면 Next.js의 error.tsx로 전파
 		throw handleError(error, 'PpiPage');

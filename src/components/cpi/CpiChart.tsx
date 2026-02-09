@@ -9,6 +9,7 @@ interface StatisticItem {
 	DATA_VALUE: string;
 	TIME: string;
 	ITEM_NAME1: string;
+	ITEM_NAME2?: string | null;
 	UNIT_NAME: string;
 }
 
@@ -16,9 +17,15 @@ interface CpiChartProps {
 	data: Record<string, StatisticItem[]>;
 	emptyMessage?: string;
 	height?: string;
+	nameKey?: 'ITEM_NAME1' | 'ITEM_NAME2';
 }
 
-const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.', height = '24rem' }: CpiChartProps) => {
+const CpiChart = ({
+	data,
+	emptyMessage = '표시할 데이터가 없습니다.',
+	height = '24rem',
+	nameKey = 'ITEM_NAME1',
+}: CpiChartProps) => {
 	// itemCode를 기반으로 일관된 색상 인덱스 생성
 	const getColorIndex = useCallback((code: string) => {
 		return code.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % CHART_COLORS.length;
@@ -52,14 +59,15 @@ const CpiChart = ({ data, emptyMessage = '표시할 데이터가 없습니다.',
 		const result: LineConfig[] = [];
 		Object.entries(data).forEach(([itemCode, dataset]) => {
 			if (dataset.length === 0) return;
+			const itemName = nameKey === 'ITEM_NAME2' ? dataset[0]?.ITEM_NAME2 : dataset[0]?.ITEM_NAME1;
 			result.push({
 				dataKey: itemCode,
-				name: dataset[0]?.ITEM_NAME1 || '',
+				name: itemName || '',
 				color: CHART_COLORS[getColorIndex(itemCode)],
 			});
 		});
 		return result;
-	}, [data, getColorIndex]);
+	}, [data, getColorIndex, nameKey]);
 
 	// 단위명 추출
 	const unitName = useMemo(() => {
