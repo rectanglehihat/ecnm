@@ -1,3 +1,4 @@
+import { CODE_PPI } from '@/const/BOK_CODE';
 import { StatisticSearchItem, StatisticSearchResponse } from '@/lib/cpi/fetchCpiStatistics';
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
@@ -12,7 +13,7 @@ const fetchPpiStatistics = async (
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
-	const statCode = '901Y093';
+	const statCode = CODE_PPI;
 	const cycle = 'M';
 	const startTime = '195001';
 	const endTime = '202512';

@@ -1,4 +1,5 @@
 import CpiTopLevelButtons from '@/components/cpi/CpiTopLevelButtons';
+import { CODE_CPI } from '@/const/BOK_CODE';
 import { fetchCpiItemCodes } from '@/lib/cpi/fetchCpiItemCodes';
 import { handleError } from '@/lib/errors';
 
@@ -6,7 +7,7 @@ export default async function CpiPage() {
 	let hierarchy;
 
 	try {
-		hierarchy = await fetchCpiItemCodes('901Y009');
+		hierarchy = await fetchCpiItemCodes(CODE_CPI);
 	} catch (error) {
 		// 에러가 발생하면 Next.js의 error.tsx로 전파
 		throw handleError(error, 'CpiPage');

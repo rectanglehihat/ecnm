@@ -1,6 +1,6 @@
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
-import HierarchyButtons from '@/components/cpi/HierarchyButtons';
 import PpiDynamicSection from '@/components/ppi/PpiDynamicSection';
+import { CODE_PPI } from '@/const/BOK_CODE';
 import { handleError, ValidationError } from '@/lib/errors';
 import { fetchPpiItemCodes } from '@/lib/ppi/fetchPpiItemCodes';
 import { Suspense } from 'react';
@@ -15,7 +15,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 	let hierarchy;
 
 	try {
-		hierarchy = await fetchPpiItemCodes('901Y093');
+		hierarchy = await fetchPpiItemCodes(CODE_PPI);
 	} catch (error) {
 		// 에러가 발생하면 Next.js의 error.tsx로 전파
 		throw handleError(error, 'DynamicCodePage');
