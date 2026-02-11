@@ -20,11 +20,6 @@ export default async function PpiPage() {
 	return (
 		<main className="space-y-8">
 			<h1 className="text-xl font-bold sm:text-2xl m-0">부동산가격지수(PPI)</h1>
-			<section className="py-6 sm:py-10">
-				<div className="flex flex-col gap-2 rounded-lg bg-gray-200 p-4 text-sm text-gray-600 sm:p-5 sm:text-base">
-					종합
-				</div>
-			</section>
 
 			<section>
 				<PpiTopLevelButtons data={hierarchy} />
