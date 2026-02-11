@@ -20,27 +20,20 @@ const HomeIcon = () => (
 	</svg>
 );
 
-const GaugeIcon = () => (
-	<svg
-		aria-hidden
-		focusable="false"
-		className="h-6 w-6"
-		viewBox="0 0 24 24"
-		fill="none"
-		stroke="currentColor"
-		strokeWidth="1.8"
-		strokeLinecap="round"
-		strokeLinejoin="round"
-	>
-		<path d="M21 14.5A9 9 0 1 0 3 14.5" />
-		<path d="M12 7v5l3 1.5" />
-		<circle
-			cx="12"
-			cy="15"
-			r=".5"
-		/>
-	</svg>
-);
+const NAV_ITEMS = [
+	{
+		key: 'cpi',
+		href: '/cpi',
+		label: 'CPI',
+		ariaLabel: '소비자물가지수(CPI) 페이지로 이동',
+	},
+	{
+		key: 'ppi',
+		href: '/ppi',
+		label: 'PPI',
+		ariaLabel: '생산자물가지수(PPI) 페이지로 이동',
+	},
+];
 
 const Header = () => {
 	const pathname = usePathname();
@@ -56,14 +49,18 @@ const Header = () => {
 				>
 					<HomeIcon />
 				</Link>
-				<Link
-					href="/cpi"
-					aria-label="소비자물가지수(CPI) 페이지로 이동"
-					className="flex items-center gap-1 text-md font-semibold text-zinc-700 hover:text-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:text-zinc-300 dark:hover:text-white dark:focus-visible:outline-white"
-				>
-					<span className="hidden sm:inline">CPI</span>
-					<GaugeIcon />
-				</Link>
+				<div className="flex items-center gap-3">
+					{NAV_ITEMS.map(({ key, href, label, ariaLabel }) => (
+						<Link
+							key={key}
+							href={href}
+							aria-label={ariaLabel}
+							className="flex items-center gap-1 text-md font-semibold text-zinc-700 hover:text-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:text-zinc-300 dark:hover:text-white dark:focus-visible:outline-white"
+						>
+							<span className="hidden sm:inline">{label}</span>
+						</Link>
+					))}
+				</div>
 			</nav>
 		</header>
 	);
