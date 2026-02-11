@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { fetchCpiItemCodes } from '@/lib/cpi/fetchCpiItemCodes';
 import HierarchyButtons from '@/components/cpi/HierarchyButtons';
 import { handleError, ValidationError } from '@/lib/errors';
+import { CODE_CPI } from '@/const/BOK_CODE';
 
 interface PageProps {
 	params: Promise<{ code: string }>;
@@ -15,7 +16,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 	let hierarchy;
 
 	try {
-		hierarchy = await fetchCpiItemCodes('901Y009', code);
+		hierarchy = await fetchCpiItemCodes(CODE_CPI, code);
 	} catch (error) {
 		// 에러가 발생하면 Next.js의 error.tsx로 전파
 		throw handleError(error, 'DynamicCodePage');

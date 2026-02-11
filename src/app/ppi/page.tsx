@@ -1,12 +1,13 @@
 import PpiTopLevelButtons from '@/components/ppi/PpiTopLevelButtons';
 import { fetchPpiItemCodes } from '@/lib/ppi/fetchPpiItemCodes';
 import { handleError } from '@/lib/errors';
+import { CODE_PPI } from '@/const/BOK_CODE';
 
 export default async function PpiPage() {
 	let hierarchy;
 
 	try {
-		hierarchy = await fetchPpiItemCodes('901Y093');
+		hierarchy = await fetchPpiItemCodes(CODE_PPI);
 	} catch (error) {
 		// 에러가 발생하면 Next.js의 error.tsx로 전파
 		throw handleError(error, 'PpiPage');

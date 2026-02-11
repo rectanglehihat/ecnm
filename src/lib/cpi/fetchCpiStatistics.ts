@@ -1,3 +1,4 @@
+import { CODE_CPI } from '@/const/BOK_CODE';
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
 export interface StatisticSearchItem {
@@ -32,7 +33,7 @@ const fetchCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Rec
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
-	const statCode = '901Y009';
+	const statCode = CODE_CPI;
 	const cycle = 'A';
 	const startTime = '1950';
 	const endTime = '2024';
