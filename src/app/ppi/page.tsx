@@ -19,7 +19,7 @@ export default async function PpiPage() {
 
 	return (
 		<main className="space-y-8">
-			<h1 className="text-xl font-bold sm:text-2xl m-0">부동산가격지수(PPI)</h1>
+			<h1 className="text-xl font-bold sm:text-2xl m-0 pb-10">부동산가격지수(PPI)</h1>
 
 			<section>
 				<PpiTopLevelButtons data={hierarchy} />
