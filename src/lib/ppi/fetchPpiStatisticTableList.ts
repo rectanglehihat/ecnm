@@ -5,7 +5,7 @@ import { ApiError, DataError, handleError } from '@/lib/errors';
 /**
  * 한국은행 Open API의 통계조회 조건 설정 API를 사용하여 서비스 통계 목록을 검색합니다.
  */
-const fetchPpiStatisticTableList = async (itemCode: string): Promise<Record<string, StatisticSearchItem[]>> => {
+const fetchPpiStatisticTableList = async (itemCode: string): Promise<StatisticSearchItem | null> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
@@ -36,14 +36,12 @@ const fetchPpiStatisticTableList = async (itemCode: string): Promise<Record<stri
 
 	const data = (await res.json()) as StatisticSearchResponse;
 
-	const result: Record<string, StatisticSearchItem[]> = {};
+	let result: StatisticSearchItem | null = null;
 	const rows = (data as any)?.StatisticTableList?.row as StatisticSearchItem[] | undefined;
 
 	if (Array.isArray(rows)) {
 		const matched = rows.find((row) => row.STAT_CODE === itemCode);
-		result[itemCode] = matched ? [matched] : [];
-	} else {
-		result[itemCode] = [];
+		result = matched ?? null;
 	}
 
 	return result;
