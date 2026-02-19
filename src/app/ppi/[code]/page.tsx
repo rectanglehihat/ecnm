@@ -34,7 +34,6 @@ export default async function Page({ params, searchParams }: PageProps) {
 	return (
 		<main className="space-y-6">
 			<h1 className="text-xl font-bold sm:text-2xl">{queryParams.name}</h1>
-			{/* <HierarchyButtons>{hierarchy}</HierarchyButtons> */}
 
 			{hierarchy?.map((childItem) => {
 				const childItemCodes = childItem.children
