@@ -21,7 +21,7 @@ const PpiHierarchyButtons = ({ data }: Props) => {
 			<Button
 				key={data.STAT_CODE}
 				// href={`/ppi/${data.STAT_CODE}?code=${Object.values(data.children ?? {})[0]?.ITEM_CODE ?? ''}&name=${data.name}`}
-				className="flex h-auto w-full items-center justify-center rounded-full bg-foreground px-4 py-2.5 text-sm text-background hover:bg-[#383838] dark:hover:bg-[#ccc] sm:px-6 sm:text-base"
+				className="flex h-auto w-full cursor-pointer items-center justify-center rounded-full bg-foreground px-4 py-2.5 text-sm text-background hover:bg-[#383838] dark:hover:bg-[#ccc] sm:px-6 sm:text-base"
 			>
 				{data.STAT_NAME}
 			</Button>
