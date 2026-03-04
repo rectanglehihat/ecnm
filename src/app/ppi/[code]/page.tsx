@@ -1,6 +1,5 @@
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import PpiDynamicSection from '@/components/ppi/PpiDynamicSection';
-import { CODE_PPI } from '@/const/BOK_CODE';
 import { handleError, ValidationError } from '@/lib/errors';
 import { fetchPpiItemCodes } from '@/lib/ppi/fetchPpiItemCodes';
 import { Suspense } from 'react';
@@ -15,18 +14,14 @@ export default async function Page({ params, searchParams }: PageProps) {
 	let hierarchy;
 
 	try {
-		hierarchy = await fetchPpiItemCodes(CODE_PPI);
+		hierarchy = await fetchPpiItemCodes(code);
 	} catch (error) {
 		// 에러가 발생하면 Next.js의 error.tsx로 전파
-		throw handleError(error, 'DynamicCodePage');
+		throw handleError(error, 'DynamicPpiPage');
 	}
 
 	if (!hierarchy) {
-		throw new ValidationError('데이터 조회 실패', {
-			location: 'DynamicCodePage',
-			userMessage: '요청한 PPI 데이터를 찾을 수 없습니다.',
-			metadata: { code },
-		});
+		return <div className="text-red-500">❌ 데이터 조회 실패</div>;
 	}
 
 	const queryParams = await searchParams;
@@ -53,7 +48,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 						<PpiDynamicSection
 							itemCodes={childItemCodes}
 							name={childItem.name}
-							parentCode={code}
+							parentCode={childItem.code}
 						/>
 					</Suspense>
 				);
