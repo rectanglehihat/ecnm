@@ -1,4 +1,4 @@
-import { CODE_PPI } from '@/const/BOK_CODE';
+import { CODE_PPI_2021_06 } from '@/const/BOK_CODE';
 import { StatisticSearchResponse } from '@/lib/cpi/fetchCpiStatistics';
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
@@ -19,7 +19,7 @@ const fetchPpiStatisticTableList = async (itemCode: string): Promise<PpiStatisti
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
-	const statCode = CODE_PPI;
+	const statCode = CODE_PPI_2021_06;
 
 	if (!apiKey || !baseUrl) {
 		throw new DataError('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.', {

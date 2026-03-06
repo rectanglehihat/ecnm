@@ -1,5 +1,5 @@
 import { handleError } from '@/lib/errors';
-import { CODE_PPI } from '@/const/BOK_CODE';
+import { CODE_PPI_2021_06 } from '@/const/BOK_CODE';
 import PpiHierarchyButtons from '@/components/ppi/PpiHierarchyButtons';
 import fetchPpiStatisticTableList from '@/lib/ppi/fetchPpiStatisticTableList';
 
@@ -7,7 +7,7 @@ export default async function PpiPage() {
 	let topPpiCode;
 
 	try {
-		topPpiCode = await fetchPpiStatisticTableList(CODE_PPI);
+		topPpiCode = await fetchPpiStatisticTableList(CODE_PPI_2021_06);
 	} catch (error) {
 		handleError(error, 'PpiPage');
 	}
