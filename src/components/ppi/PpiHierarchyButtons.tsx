@@ -17,15 +17,13 @@ const PpiHierarchyButtons = ({ data }: Props) => {
 	if (!data) return null;
 
 	return (
-		<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-			<Button
-				key={data.STAT_CODE}
-				href={`/ppi/${data.STAT_CODE}?name=${data.STAT_NAME}`}
-				className="flex h-auto w-full cursor-pointer items-center justify-center rounded-full bg-foreground px-4 py-2.5 text-sm text-background hover:bg-[#383838] dark:hover:bg-[#ccc] sm:px-6 sm:text-base"
-			>
-				{data.STAT_NAME}
-			</Button>
-		</div>
+		<Button
+			key={data.STAT_CODE}
+			href={`/ppi/${data.STAT_CODE}?name=${data.STAT_NAME}`}
+			className="flex h-auto w-full cursor-pointer items-center justify-center rounded-full bg-foreground px-4 py-2.5 text-sm text-background hover:bg-[#383838] dark:hover:bg-[#ccc] sm:px-6 sm:text-base"
+		>
+			{data.STAT_NAME}
+		</Button>
 	);
 };
 

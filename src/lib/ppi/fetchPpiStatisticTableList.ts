@@ -19,8 +19,6 @@ const fetchPpiStatisticTableList = async (itemCode: string): Promise<PpiStatisti
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
 	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
 
-	const statCode = CODE_PPI_2021_06;
-
 	if (!apiKey || !baseUrl) {
 		throw new DataError('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.', {
 			location: 'fetchPpiStatisticTableList',
@@ -30,15 +28,15 @@ const fetchPpiStatisticTableList = async (itemCode: string): Promise<PpiStatisti
 		});
 	}
 
-	const url = `${baseUrl}/StatisticTableList/${apiKey}/json/kr/1/10/${statCode}`;
+	const url = `${baseUrl}/StatisticTableList/${apiKey}/json/kr/1/10/${itemCode}`;
 	const res = await fetch(url, { next: { revalidate: 60 * 60 * 24 * 30 } });
 
 	if (!res.ok) {
-		const error = new ApiError(`한국은행 Open API 호출 실패 (${statCode})`, res.status, {
+		const error = new ApiError(`한국은행 Open API 호출 실패 (${itemCode})`, res.status, {
 			location: 'fetchPpiStatisticTableList',
 			userMessage: 'PPI 통계 데이터를 불러올 수 없습니다.',
 			retryable: res.status >= 500,
-			metadata: { statCode, url, status: res.status, statusText: res.statusText },
+			metadata: { itemCode, url, status: res.status, statusText: res.statusText },
 		});
 		handleError(error, 'fetchPpiStatisticTableList');
 		throw error;

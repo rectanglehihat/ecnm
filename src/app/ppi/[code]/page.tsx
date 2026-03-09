@@ -1,6 +1,6 @@
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import PpiDynamicSection from '@/components/ppi/PpiDynamicSection';
-import { handleError, ValidationError } from '@/lib/errors';
+import { handleError } from '@/lib/errors';
 import { fetchPpiItemCodes } from '@/lib/ppi/fetchPpiItemCodes';
 import { Suspense } from 'react';
 
