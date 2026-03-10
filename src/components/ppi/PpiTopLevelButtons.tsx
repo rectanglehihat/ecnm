@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import Button from '@/components/ui/Button';
 import { PpiItemHierarchy } from '@/lib/ppi/fetchPpiItemCodes';
 
@@ -26,4 +27,4 @@ const PpiTopLevelButtons = ({ data }: Props) => {
 };
 
 PpiTopLevelButtons.displayName = 'PpiTopLevelButtons';
-export default PpiTopLevelButtons;
+export default memo(PpiTopLevelButtons);

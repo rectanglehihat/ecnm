@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import Button from '@/components/ui/Button';
 
 type Props = {
@@ -27,4 +28,5 @@ const PpiHierarchyButtons = ({ data }: Props) => {
 	);
 };
 
-export default PpiHierarchyButtons;
+PpiHierarchyButtons.displayName = 'PpiHierarchyButtons';
+export default memo(PpiHierarchyButtons);

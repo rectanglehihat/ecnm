@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Skeleton from '@/components/ui/Skeleton';
 
 const ChartSkeleton = () => {
@@ -58,4 +59,4 @@ const ChartSkeleton = () => {
 };
 
 ChartSkeleton.displayName = 'ChartSkeleton';
-export default ChartSkeleton;
+export default memo(ChartSkeleton);
