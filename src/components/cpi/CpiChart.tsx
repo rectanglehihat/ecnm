@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, memo } from 'react';
 import { LineChart } from '@/components/charts';
 import type { LineConfig, ChartDataPoint } from '@/components/charts';
 import { CHART_COLORS } from '@/const/CHART_COLORS';
@@ -87,4 +87,4 @@ const CpiChart = ({
 };
 
 CpiChart.displayName = 'CpiChart';
-export default CpiChart;
+export default memo(CpiChart);

@@ -1,9 +1,12 @@
+import { memo } from 'react';
+
 interface SkeletonProps {
 	className?: string;
 }
 
-const Skeleton = ({ className = '' }: SkeletonProps) => {
+const Skeleton = memo(({ className = '' }: SkeletonProps) => {
 	return <div className={`skeleton-shimmer rounded ${className}`} />;
-};
+});
 
-export default Skeleton;
+Skeleton.displayName = 'Skeleton';
+export default memo(Skeleton);

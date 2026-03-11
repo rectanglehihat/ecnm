@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import type { CpiItemHierarchy } from '@/lib/cpi/fetchCpiItemCodes';
@@ -48,4 +49,4 @@ const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
 };
 
 HierarchyButtons.displayName = 'HierarchyButtons';
-export default HierarchyButtons;
+export default memo(HierarchyButtons);

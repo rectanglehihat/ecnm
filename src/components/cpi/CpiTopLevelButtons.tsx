@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import Button from '@/components/ui/Button';
 import { CpiItemHierarchy } from '@/lib/cpi/fetchCpiItemCodes';
 
@@ -30,4 +31,4 @@ const CpiTopLevelButtons = ({ data }: Props) => {
 };
 
 CpiTopLevelButtons.displayName = 'CpiTopLevelButtons';
-export default CpiTopLevelButtons;
+export default memo(CpiTopLevelButtons);
