@@ -1,5 +1,5 @@
 import { handleError } from '@/lib/errors';
-import { CODE_PPI_2021_06, CODE_PPI_2025_03 } from '@/const/BOK_CODE';
+import { CODE_PPI_Buying_2021_06, CODE_PPI_Buying_2025_03 } from '@/const/BOK_CODE';
 import PpiHierarchyButtons from '@/components/ppi/PpiHierarchyButtons';
 import fetchPpiStatisticTableList from '@/lib/ppi/fetchPpiStatisticTableList';
 
@@ -8,8 +8,8 @@ export default async function PpiPage() {
 	let topPpiCode_2025;
 
 	try {
-		topPpiCode_2021 = await fetchPpiStatisticTableList(CODE_PPI_2021_06);
-		topPpiCode_2025 = await fetchPpiStatisticTableList(CODE_PPI_2025_03);
+		topPpiCode_2021 = await fetchPpiStatisticTableList(CODE_PPI_Buying_2021_06);
+		topPpiCode_2025 = await fetchPpiStatisticTableList(CODE_PPI_Buying_2025_03);
 	} catch (error) {
 		handleError(error, 'PpiPage');
 	}
