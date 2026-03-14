@@ -15,15 +15,15 @@ export default async function Home() {
 				<div className="flex w-full flex-col gap-4 text-base font-medium sm:w-auto sm:flex-row">
 					<Button
 						href="/cpi"
-						className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] sm:w-fit md:w-[158px]"
+						className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] sm:w-fit md:w-48"
 					>
-						소비자물가지수
+						소비자물가지수 (CPI)
 					</Button>
 					<Button
 						href="/ppi"
-						className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] sm:w-fit md:w-[158px]"
+						className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] sm:w-fit md:w-48"
 					>
-						부동산가격지수
+						부동산가격지수 (PPI)
 					</Button>
 				</div>
 			</main>
