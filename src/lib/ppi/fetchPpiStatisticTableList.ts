@@ -55,4 +55,28 @@ const fetchPpiStatisticTableList = async (itemCode: string): Promise<PpiStatisti
 	return result;
 };
 
-export default fetchPpiStatisticTableList;
+const fetchPpiStatisticTableLists = async (itemCodes: string[]): Promise<(PpiStatisticTableListType | null)[]> => {
+	if (!Array.isArray(itemCodes) || itemCodes.length === 0) {
+		return [];
+	}
+
+	const results = await Promise.allSettled(
+		itemCodes.map((code) =>
+			fetchPpiStatisticTableList(code).catch((error) => {
+				handleError(error, 'fetchPpiStatisticTableLists');
+				return null;
+			}),
+		),
+	);
+
+	return results.map((result, idx) => {
+		if (result.status === 'fulfilled') {
+			return result.value;
+		}
+
+		handleError(result.reason, `fetchPpiStatisticTableLists:${itemCodes[idx]}`);
+		return null;
+	});
+};
+
+export { fetchPpiStatisticTableList, fetchPpiStatisticTableLists };
