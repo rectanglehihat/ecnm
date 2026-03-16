@@ -3,3 +3,5 @@ export const CODE_PPI_Buying_2021_06 = '901Y093';
 export const CODE_PPI_Buying_2025_03 = '901Y113';
 export const CODE_PPI_Jeonse_2021_06 = '901Y094';
 export const CODE_PPI_Jeonse_2025_03 = '901Y114';
+export const CODE_PPI_monthly_rent_2021_06 = '901Y095';
+export const CODE_PPI_monthly_rent_2025_03 = '901Y115';
