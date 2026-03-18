@@ -10,7 +10,7 @@ interface HierarchyButtonsProps {
 	children: Record<string, CpiItemHierarchy> | PpiItemHierarchy[];
 }
 
-const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
+const CpiHierarchyButtons = ({ children }: HierarchyButtonsProps) => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const selectedCode = searchParams.get('code');
@@ -48,5 +48,5 @@ const HierarchyButtons = ({ children }: HierarchyButtonsProps) => {
 	);
 };
 
-HierarchyButtons.displayName = 'HierarchyButtons';
-export default memo(HierarchyButtons);
+CpiHierarchyButtons.displayName = 'CpiHierarchyButtons';
+export default memo(CpiHierarchyButtons);
