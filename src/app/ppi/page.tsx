@@ -1,22 +1,22 @@
 import { handleError } from '@/lib/errors';
 import {
-	CODE_PPI_Buying_2021_06,
-	CODE_PPI_Buying_2025_03,
-	CODE_PPI_Jeonse_2021_06,
-	CODE_PPI_Jeonse_2025_03,
-	CODE_PPI_monthly_rent_2021_06,
-	CODE_PPI_monthly_rent_2025_03,
+	CODE_PPI_BUYING_2021_06,
+	CODE_PPI_BUYING_2025_03,
+	CODE_PPI_JEONSE_2021_06,
+	CODE_PPI_JEONSE_2025_03,
+	CODE_PPI_MONTHLY_RENT_2021_06,
+	CODE_PPI_MONTHLY_RENT_2025_03,
 } from '@/const/BOK_CODE';
 import PpiHierarchyButtons from '@/components/ppi/PpiHierarchyButtons';
 import { fetchPpiStatisticTableLists, PpiStatisticTableListType } from '@/lib/ppi/fetchPpiStatisticTableList';
 
 const PPI_MAIN_CODES = [
-	CODE_PPI_Buying_2021_06,
-	CODE_PPI_Buying_2025_03,
-	CODE_PPI_Jeonse_2021_06,
-	CODE_PPI_Jeonse_2025_03,
-	CODE_PPI_monthly_rent_2021_06,
-	CODE_PPI_monthly_rent_2025_03,
+	CODE_PPI_BUYING_2021_06,
+	CODE_PPI_BUYING_2025_03,
+	CODE_PPI_JEONSE_2021_06,
+	CODE_PPI_JEONSE_2025_03,
+	CODE_PPI_MONTHLY_RENT_2021_06,
+	CODE_PPI_MONTHLY_RENT_2025_03,
 ];
 
 export default async function PpiPage() {

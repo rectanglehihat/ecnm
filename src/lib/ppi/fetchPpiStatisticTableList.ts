@@ -1,4 +1,4 @@
-import { CODE_PPI_Buying_2021_06 } from '@/const/BOK_CODE';
+import { CODE_PPI_BUYING_2021_06 } from '@/const/BOK_CODE';
 import { StatisticSearchResponse } from '@/lib/cpi/fetchCpiStatistics';
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
