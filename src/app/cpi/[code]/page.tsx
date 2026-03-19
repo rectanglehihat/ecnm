@@ -2,9 +2,9 @@ import DynamicSection from '@/components/cpi/DynamicSection';
 import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import { Suspense } from 'react';
 import { fetchCpiItemCodes } from '@/lib/cpi/fetchCpiItemCodes';
-import HierarchyButtons from '@/components/cpi/HierarchyButtons';
 import { handleError, ValidationError } from '@/lib/errors';
 import { CODE_CPI } from '@/const/BOK_CODE';
+import CpiHierarchyButtons from '@/components/cpi/CpiHierarchyButtons';
 
 interface PageProps {
 	params: Promise<{ code: string }>;
@@ -55,7 +55,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 	return (
 		<main className="space-y-6">
 			<h1 className="text-xl font-bold sm:text-2xl">{hierarchy.name}</h1>
-			<HierarchyButtons>{hierarchy.children}</HierarchyButtons>
+			<CpiHierarchyButtons>{hierarchy.children}</CpiHierarchyButtons>
 
 			{Object.values(parentItem.children).map((childItem) => {
 				const childItemCodes = childItem.children ? Object.values(childItem.children).map((item) => item.code) : [];
