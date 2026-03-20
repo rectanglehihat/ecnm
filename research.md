@@ -11,14 +11,14 @@
 
 ### 기술 스택
 
-| 항목 | 버전 |
-|------|------|
-| Next.js | 16.0.10 (App Router) |
-| React | 19.2.0 |
-| TypeScript | ^5 (strict 모드) |
-| Recharts | ^3.5.0 |
-| Tailwind CSS | ^4 |
-| Node.js | >=20.0.0 |
+| 항목         | 버전                 |
+| ------------ | -------------------- |
+| Next.js      | 16.0.10 (App Router) |
+| React        | 19.2.0               |
+| TypeScript   | ^5 (strict 모드)     |
+| Recharts     | ^3.5.0               |
+| Tailwind CSS | ^4                   |
+| Node.js      | >=20.0.0             |
 
 ---
 
@@ -97,21 +97,21 @@ Next.js App Router 기반이며 총 4개의 페이지와 3개의 에러 바운�
 
 ### 페이지 목록
 
-| URL 패턴 | 파일 경로 | 렌더링 방식 | 역할 |
-|----------|-----------|-------------|------|
-| `/` | `app/page.tsx` | 서버 컴포넌트 | CPI/PPI 진입 선택 |
-| `/cpi` | `app/cpi/page.tsx` | 서버 컴포넌트 | CPI 최상위 카테고리 목록 |
-| `/cpi/[code]` | `app/cpi/[code]/page.tsx` | 서버 컴포넌트 + Suspense | CPI 계층 탐색 및 차트 |
-| `/ppi` | `app/ppi/page.tsx` | 서버 컴포넌트 | PPI 통계 테이블 목록 6개 |
-| `/ppi/[code]` | `app/ppi/[code]/page.tsx` | 서버 컴포넌트 + Suspense | PPI 계층 탐색 및 차트 |
+| URL 패턴      | 파일 경로                 | 렌더링 방식              | 역할                     |
+| ------------- | ------------------------- | ------------------------ | ------------------------ |
+| `/`           | `app/page.tsx`            | 서버 컴포넌트            | CPI/PPI 진입 선택        |
+| `/cpi`        | `app/cpi/page.tsx`        | 서버 컴포넌트            | CPI 최상위 카테고리 목록 |
+| `/cpi/[code]` | `app/cpi/[code]/page.tsx` | 서버 컴포넌트 + Suspense | CPI 계층 탐색 및 차트    |
+| `/ppi`        | `app/ppi/page.tsx`        | 서버 컴포넌트            | PPI 통계 테이블 목록 6개 |
+| `/ppi/[code]` | `app/ppi/[code]/page.tsx` | 서버 컴포넌트 + Suspense | PPI 계층 탐색 및 차트    |
 
 ### 에러 바운더리 범위
 
-| 파일 | 커버 범위 | 테마 색상 |
-|------|-----------|-----------|
-| `app/global-error.tsx` | 루트 레이아웃까지 포함한 치명적 에러 | 빨간색 |
-| `app/error.tsx` | 루트 레이아웃 하위 일반 에러 | 호박색 |
-| `app/cpi/error.tsx` | CPI 라우트 한정 에러 | 파란색 |
+| 파일                   | 커버 범위                            | 테마 색상 |
+| ---------------------- | ------------------------------------ | --------- |
+| `app/global-error.tsx` | 루트 레이아웃까지 포함한 치명적 에러 | 빨간색    |
+| `app/error.tsx`        | 루트 레이아웃 하위 일반 에러         | 호박색    |
+| `app/cpi/error.tsx`    | CPI 라우트 한정 에러                 | 파란색    |
 
 ### URL 상태 관리 (CPI)
 
@@ -132,62 +132,66 @@ CPI 동적 페이지는 계층 탐색 상태를 URL 검색 파라미터로 관�
 ### 한국은행 API 응답 타입
 
 **`StatisticItem`** (항목 코드 목록 응답)
+
 ```typescript
 interface StatisticItem {
-  STAT_CODE: string;       // 통계 코드 (예: '901Y009')
-  STAT_NAME: string;       // 통계명
-  GRP_CODE: string;        // 그룹 코드
-  GRP_NAME: string;        // 그룹명
-  ITEM_CODE: string;       // 항목 코드 (예: 'A01101')
-  ITEM_NAME: string;       // 항목명
-  P_ITEM_CODE: string | null;  // 부모 항목 코드 (null이면 최상위)
-  P_ITEM_NAME: string | null;
-  CYCLE: string;           // 주기: 'A'(연), 'M'(월), 'Q'(분기)
-  START_TIME: string;      // 데이터 시작 시점
-  END_TIME: string;
-  DATA_CNT: number;        // 데이터 건수
-  UNIT_NAME: string;       // 단위 (예: '2020=100')
-  WEIGHT: string;          // 가중치
+	STAT_CODE: string; // 통계 코드 (예: '901Y009')
+	STAT_NAME: string; // 통계명
+	GRP_CODE: string; // 그룹 코드
+	GRP_NAME: string; // 그룹명
+	ITEM_CODE: string; // 항목 코드 (예: 'A01101')
+	ITEM_NAME: string; // 항목명
+	P_ITEM_CODE: string | null; // 부모 항목 코드 (null이면 최상위)
+	P_ITEM_NAME: string | null;
+	CYCLE: string; // 주기: 'A'(연), 'M'(월), 'Q'(분기)
+	START_TIME: string; // 데이터 시작 시점
+	END_TIME: string;
+	DATA_CNT: number; // 데이터 건수
+	UNIT_NAME: string; // 단위 (예: '2020=100')
+	WEIGHT: string; // 가중치
 }
 ```
 
 **`StatisticSearchItem`** (통계 데이터 조회 응답 행)
+
 ```typescript
 interface StatisticSearchItem {
-  DATA_VALUE: string;      // 지수 값 (문자열, parseFloat 필요)
-  ITEM_CODE1: string;      // 1단계 항목 코드
-  ITEM_CODE2: string | null;  // 2단계 항목 코드
-  ITEM_CODE3: string | null;  // 3단계 항목 코드
-  ITEM_CODE4: string | null;
-  ITEM_NAME1: string;      // 1단계 항목명
-  ITEM_NAME2: string | null;  // 2단계 항목명 (PPI 차트 레이블에 사용)
-  ITEM_NAME3: string | null;
-  ITEM_NAME4: string | null;
-  STAT_CODE: string;
-  STAT_NAME: string;
-  TIME: string;            // 시점 (CPI: '2024', PPI: '202312')
-  UNIT_NAME: string;       // 단위
-  WGT: string;             // 가중치
+	DATA_VALUE: string; // 지수 값 (문자열, parseFloat 필요)
+	ITEM_CODE1: string; // 1단계 항목 코드
+	ITEM_CODE2: string | null; // 2단계 항목 코드
+	ITEM_CODE3: string | null; // 3단계 항목 코드
+	ITEM_CODE4: string | null;
+	ITEM_NAME1: string; // 1단계 항목명
+	ITEM_NAME2: string | null; // 2단계 항목명 (PPI 차트 레이블에 사용)
+	ITEM_NAME3: string | null;
+	ITEM_NAME4: string | null;
+	STAT_CODE: string;
+	STAT_NAME: string;
+	TIME: string; // 시점 (CPI: '2024', PPI: '202312')
+	UNIT_NAME: string; // 단위
+	WGT: string; // 가중치
 }
 ```
 
 ### 애플리케이션 내부 계층 타입
 
 **CPI 계층 구조** (재귀적 트리)
+
 ```typescript
 interface CpiItemHierarchy {
-  code: string;
-  name: string;
-  children: Record<string, CpiItemHierarchy>;  // 코드 → 계층 노드
+	code: string;
+	name: string;
+	children: Record<string, CpiItemHierarchy>; // 코드 → 계층 노드
 }
 ```
 
 **PPI 계층 구조** (2단계 평면 계층)
+
 ```typescript
 interface PpiItemHierarchy {
-  code: string;            // H로 시작 (부모)
-  name: string;
-  children: StatisticItem[];  // R로 시작 (자식들)
+	code: string; // H로 시작 (부모)
+	name: string;
+	children: StatisticItem[]; // R로 시작 (자식들)
 }
 ```
 
@@ -209,30 +213,33 @@ NEXT_PUBLIC_BOK_API_KEY=4LOJGFSWCZ85A9JDTPJB
 ### 통계 코드 상수 (`BOK_CODE.ts`)
 
 ```typescript
-CODE_CPI                       = '901Y009'  // 소비자물가지수 (2020=100)
-CODE_PPI_BUYING_2021_06        = '901Y093'  // 매매가격지수 (2021.06=100)
-CODE_PPI_BUYING_2025_03        = '901Y113'  // 매매가격지수 (2025.03=100)
-CODE_PPI_JEONSE_2021_06        = '901Y094'  // 전세가격지수 (2021.06=100)
-CODE_PPI_JEONSE_2025_03        = '901Y114'  // 전세가격지수 (2025.03=100)
-CODE_PPI_MONTHLY_RENT_2021_06  = '901Y095'  // 월세가격지수 (2021.06=100)
-CODE_PPI_MONTHLY_RENT_2025_03  = '901Y115'  // 월세가격지수 (2025.03=100)
-CODE_PPI_ACTUAL_TRANSACTION_PRICE = '901Y089' // 실거래가격지수 (미사용)
+CODE_CPI = '901Y009'; // 소비자물가지수 (2020=100)
+CODE_PPI_BUYING_2021_06 = '901Y093'; // 매매가격지수 (2021.06=100)
+CODE_PPI_BUYING_2025_03 = '901Y113'; // 매매가격지수 (2025.03=100)
+CODE_PPI_JEONSE_2021_06 = '901Y094'; // 전세가격지수 (2021.06=100)
+CODE_PPI_JEONSE_2025_03 = '901Y114'; // 전세가격지수 (2025.03=100)
+CODE_PPI_MONTHLY_RENT_2021_06 = '901Y095'; // 월세가격지수 (2021.06=100)
+CODE_PPI_MONTHLY_RENT_2025_03 = '901Y115'; // 월세가격지수 (2025.03=100)
+CODE_PPI_ACTUAL_TRANSACTION_PRICE = '901Y089'; // 실거래가격지수 (미사용)
 ```
 
 ### 엔드포인트 패턴
 
 **1. `StatisticItemList`** — 항목 코드 계층 조회
+
 ```
 GET /StatisticItemList/{apiKey}/json/kr/{start}/{end}/{statCode}
 ```
 
 **2. `StatisticSearch`** — 시계열 통계 데이터 조회
+
 ```
 GET /StatisticSearch/{apiKey}/json/kr/{start}/{end}/{statCode}/{cycle}/{startTime}/{endTime}/{itemCode}
 GET /StatisticSearch/{apiKey}/json/kr/{start}/{end}/{statCode}/{cycle}/{startTime}/{endTime}/{parentCode}/{itemCode}
 ```
 
 **3. `StatisticTableList`** — 통계 테이블 메타 정보 조회
+
 ```
 GET /StatisticTableList/{apiKey}/json/kr/1/10/{statCode}
 ```
@@ -249,58 +256,58 @@ GET /StatisticTableList/{apiKey}/json/kr/1/10/{statCode}
 
 ### `fetchCpiItemCodes(statCode, rootItemCode?)`
 
-| 항목 | 내용 |
-|------|------|
-| 엔드포인트 | `StatisticItemList` |
-| 배치 크기 | 100 |
-| 필터 | `CYCLE === 'A'` (연간 데이터만) |
-| 계층 구성 | `P_ITEM_CODE`를 활용한 재귀 `buildHierarchy()` |
-| 반환 타입 | `rootItemCode` 있음 → `CpiItemHierarchy`, 없음 → `CpiItemHierarchy[]` |
-| 페이지네이션 | 첫 요청 후 남은 배치 `Promise.all`로 병렬 처리 |
+| 항목         | 내용                                                                  |
+| ------------ | --------------------------------------------------------------------- |
+| 엔드포인트   | `StatisticItemList`                                                   |
+| 배치 크기    | 100                                                                   |
+| 필터         | `CYCLE === 'A'` (연간 데이터만)                                       |
+| 계층 구성    | `P_ITEM_CODE`를 활용한 재귀 `buildHierarchy()`                        |
+| 반환 타입    | `rootItemCode` 있음 → `CpiItemHierarchy`, 없음 → `CpiItemHierarchy[]` |
+| 페이지네이션 | 첫 요청 후 남은 배치 `Promise.all`로 병렬 처리                        |
 
 ### `fetchCpiStatistics(itemCodes)`
 
-| 항목 | 내용 |
-|------|------|
-| 엔드포인트 | `StatisticSearch` |
-| 통계 코드 | `CODE_CPI = '901Y009'` |
-| 주기 | `A` (연간) |
-| 조회 기간 | 1950 ~ 2024 |
+| 항목        | 내용                                       |
+| ----------- | ------------------------------------------ |
+| 엔드포인트  | `StatisticSearch`                          |
+| 통계 코드   | `CODE_CPI = '901Y009'`                     |
+| 주기        | `A` (연간)                                 |
+| 조회 기간   | 1950 ~ 2024                                |
 | 페이지 크기 | 100 (단일 페이지, 연간 데이터는 건수 적음) |
-| 병렬 처리 | itemCode별 `Promise.allSettled` |
-| 반환 타입 | `Record<itemCode, StatisticSearchItem[]>` |
+| 병렬 처리   | itemCode별 `Promise.allSettled`            |
+| 반환 타입   | `Record<itemCode, StatisticSearchItem[]>`  |
 
 ### `fetchPpiItemCodes(statCode, rootItemCode?)`
 
-| 항목 | 내용 |
-|------|------|
-| 엔드포인트 | `StatisticItemList` |
-| 배치 크기 | **10** (API 최대값) |
-| 필터 | `CYCLE === 'M'` (월간 데이터만) |
-| 계층 구성 | ITEM_CODE 접두어 기반: `H`→부모, `R`→자식 |
-| 반환 타입 | `PpiItemHierarchy[]` |
+| 항목         | 내용                                           |
+| ------------ | ---------------------------------------------- |
+| 엔드포인트   | `StatisticItemList`                            |
+| 배치 크기    | **10** (API 최대값)                            |
+| 필터         | `CYCLE === 'M'` (월간 데이터만)                |
+| 계층 구성    | ITEM_CODE 접두어 기반: `H`→부모, `R`→자식      |
+| 반환 타입    | `PpiItemHierarchy[]`                           |
 | 페이지네이션 | 첫 요청 후 남은 배치 `Promise.all`로 병렬 처리 |
 
 ### `fetchPpiStatistics(itemCodes, parentCode?)`
 
-| 항목 | 내용 |
-|------|------|
-| 엔드포인트 | `StatisticSearch` |
-| 통계 코드 | `CODE_PPI_BUYING_2021_06` (하드코딩 — 아래 이슈 참고) |
-| 주기 | `M` (월간) |
-| 조회 기간 | 195001 ~ 202512 |
-| 페이지 크기 | 100 |
-| 병렬 처리 | itemCode별 `Promise.allSettled`, 페이지별 `Promise.allSettled` |
-| 반환 타입 | `Record<itemCode, StatisticSearchItem[]>` |
+| 항목        | 내용                                                           |
+| ----------- | -------------------------------------------------------------- |
+| 엔드포인트  | `StatisticSearch`                                              |
+| 통계 코드   | `CODE_PPI_BUYING_2021_06` (하드코딩 — 아래 이슈 참고)          |
+| 주기        | `M` (월간)                                                     |
+| 조회 기간   | 195001 ~ 202512                                                |
+| 페이지 크기 | 100                                                            |
+| 병렬 처리   | itemCode별 `Promise.allSettled`, 페이지별 `Promise.allSettled` |
+| 반환 타입   | `Record<itemCode, StatisticSearchItem[]>`                      |
 
 ### `fetchPpiStatisticTableList(itemCode)` / `fetchPpiStatisticTableLists(itemCodes[])`
 
-| 항목 | 내용 |
-|------|------|
-| 엔드포인트 | `StatisticTableList` |
-| 고정 범위 | `1/10` |
-| 응답 처리 | 배열에서 `STAT_CODE === itemCode`인 항목 탐색 |
-| 복수 처리 | `Promise.allSettled`로 6개 병렬 요청 |
+| 항목       | 내용                                          |
+| ---------- | --------------------------------------------- |
+| 엔드포인트 | `StatisticTableList`                          |
+| 고정 범위  | `1/10`                                        |
+| 응답 처리  | 배열에서 `STAT_CODE === itemCode`인 항목 탐색 |
+| 복수 처리  | `Promise.allSettled`로 6개 병렬 요청          |
 
 ---
 
@@ -308,20 +315,20 @@ GET /StatisticTableList/{apiKey}/json/kr/1/10/{statCode}
 
 ### 컴포넌트 분류
 
-| 컴포넌트 | 유형 | 역할 |
-|----------|------|------|
-| `Header` | `'use client'` | 현재 경로 감지, 홈에서 숨김 |
-| `Button` | 서버 (memo) | `href` 있으면 Link, 없으면 button |
-| `Skeleton` | 서버 (memo) | shimmer 로딩 placeholder |
-| `LineChart` | `'use client'` (memo) | Recharts 추상화 래퍼 |
-| `ChartSkeleton` | 서버 | 차트 영역 로딩 스켈레톤 |
-| `CpiChart` | `'use client'` (memo) | 통계 데이터 → LineChart 변환 |
-| `CpiTopLevelButtons` | 서버 | 최상위 CPI 카테고리 버튼 그리드 |
-| `CpiHierarchyButtons` | `'use client'` | URL 파라미터 기반 계층 탐색 |
-| `DynamicSection` | 서버 async | CPI 섹션별 데이터 페칭 + 차트 |
-| `PpiTopLevelButtons` | 서버 | PPI 버튼 그리드 |
-| `PpiHierarchyButtons` | 서버 | 단일 PPI 통계 테이블 버튼 |
-| `PpiDynamicSection` | 서버 async | PPI 섹션별 데이터 페칭 + 차트 |
+| 컴포넌트              | 유형                  | 역할                              |
+| --------------------- | --------------------- | --------------------------------- |
+| `Header`              | `'use client'`        | 현재 경로 감지, 홈에서 숨김       |
+| `Button`              | 서버 (memo)           | `href` 있으면 Link, 없으면 button |
+| `Skeleton`            | 서버 (memo)           | shimmer 로딩 placeholder          |
+| `LineChart`           | `'use client'` (memo) | Recharts 추상화 래퍼              |
+| `ChartSkeleton`       | 서버                  | 차트 영역 로딩 스켈레톤           |
+| `CpiChart`            | `'use client'` (memo) | 통계 데이터 → LineChart 변환      |
+| `CpiTopLevelButtons`  | 서버                  | 최상위 CPI 카테고리 버튼 그리드   |
+| `CpiHierarchyButtons` | `'use client'`        | URL 파라미터 기반 계층 탐색       |
+| `DynamicSection`      | 서버 async            | CPI 섹션별 데이터 페칭 + 차트     |
+| `PpiTopLevelButtons`  | 서버                  | PPI 버튼 그리드                   |
+| `PpiHierarchyButtons` | 서버                  | 단일 PPI 통계 테이블 버튼         |
+| `PpiDynamicSection`   | 서버 async            | PPI 섹션별 데이터 페칭 + 차트     |
 
 ### Suspense 스트리밍 패턴
 
@@ -412,6 +419,7 @@ Error (내장)
 ```
 
 **AppError 주요 속성**
+
 ```typescript
 type: ErrorType         // CLIENT | SERVER | NETWORK | VALIDATION | UNKNOWN
 severity: ErrorSeverity // LOW | MEDIUM | HIGH | CRITICAL
@@ -428,13 +436,13 @@ isOperational: boolean  // 예상된 에러 vs 버그 구분
 
 ### 에러 처리 전략
 
-| 상황 | 처리 방식 | 결과 |
-|------|-----------|------|
-| 페이지 전체 데이터 없음 | `throw handleError()` | `error.tsx` 에러 바운더리 렌더링 |
-| 항목 일부 실패 | `handleError()` 후 빈 배열 반환 | 해당 섹션만 빈 상태로 렌더링 |
-| API 키/URL 미설정 | `DataError` throw | 치명적 에러로 처리 |
-| HTTP 5xx | `ApiError(retryable: true)` | 재시도 가능 표시 |
-| HTTP 4xx | `ApiError(retryable: false)` | 재시도 불가 표시 |
+| 상황                    | 처리 방식                       | 결과                             |
+| ----------------------- | ------------------------------- | -------------------------------- |
+| 페이지 전체 데이터 없음 | `throw handleError()`           | `error.tsx` 에러 바운더리 렌더링 |
+| 항목 일부 실패          | `handleError()` 후 빈 배열 반환 | 해당 섹션만 빈 상태로 렌더링     |
+| API 키/URL 미설정       | `DataError` throw               | 치명적 에러로 처리               |
+| HTTP 5xx                | `ApiError(retryable: true)`     | 재시도 가능 표시                 |
+| HTTP 4xx                | `ApiError(retryable: false)`    | 재시도 불가 표시                 |
 
 ### 로깅 전략
 
@@ -449,35 +457,29 @@ isOperational: boolean  // 예상된 에러 vs 버그 구분
 
 ```css
 /* 라이트 모드: 레트로 크림 배경 */
---background: #fff7d6
---foreground: #1b1b1b
---retro-accent: #ff7a00   /* 주황색 강조 */
---retro-accent-2: #16a3ff
-
-/* 다크 모드 */
---background: #0b0f1f
---foreground: #f5f3ff
---retro-accent: #ffb347
---retro-accent-2: #3dd5ff
+--background: #fff7d6 --foreground: #1b1b1b --retro-accent: #ff7a00 /* 주황색 강조 */ --retro-accent-2: #16a3ff
+	/* 다크 모드 */ --background: #0b0f1f --foreground: #f5f3ff --retro-accent: #ffb347 --retro-accent-2: #3dd5ff;
 ```
 
 ### 공통 유틸리티 클래스
 
 ```css
 .retro-panel {
-  border: 2px solid var(--retro-ink);
-  box-shadow: 4px 4px 0 var(--retro-shadow);  /* 레트로 그림자 */
+	border: 2px solid var(--retro-ink);
+	box-shadow: 4px 4px 0 var(--retro-shadow); /* 레트로 그림자 */
 }
 
 .retro-button {
-  border: 2px solid var(--retro-ink);
-  box-shadow: 3px 3px 0 var(--retro-shadow);
-  text-transform: uppercase;
-  transition: transform 0.12s, box-shadow 0.12s;
+	border: 2px solid var(--retro-ink);
+	box-shadow: 3px 3px 0 var(--retro-shadow);
+	text-transform: uppercase;
+	transition:
+		transform 0.12s,
+		box-shadow 0.12s;
 }
 .retro-button:hover {
-  transform: translate(-1px, -1px);  /* 호버 시 떠오르는 효과 */
-  box-shadow: 4px 4px 0 var(--retro-shadow);
+	transform: translate(-1px, -1px); /* 호버 시 떠오르는 효과 */
+	box-shadow: 4px 4px 0 var(--retro-shadow);
 }
 ```
 
@@ -489,15 +491,15 @@ isOperational: boolean  // 예상된 에러 vs 버그 구분
 
 ## 11. 성능 최적화 현황
 
-| 최적화 기법 | 적용 위치 | 효과 |
-|-------------|-----------|------|
-| `memo()` | Button, Skeleton, LineChart, CpiChart | 불필요한 리렌더링 방지 |
-| `useMemo` | CpiChart (sortedYears, chartData, lines, unitName) | 비용 큰 계산 캐싱 |
-| `useCallback` | CpiChart (getColorIndex) | 함수 참조 안정화 |
-| Next.js ISR | 모든 fetch 호출 (`revalidate: 30일`) | 반복 API 호출 차단 |
-| `Promise.all` / `Promise.allSettled` | 배치 페이지네이션, itemCode별 통계 조회 | 병렬 처리로 지연 최소화 |
-| Suspense 스트리밍 | CPI/PPI 동적 페이지 | 첫 바이트까지의 시간(TTFB) 단축 |
-| 서버 컴포넌트 | 대부분의 컴포넌트 | JS 번들 크기 감소 |
+| 최적화 기법                          | 적용 위치                                          | 효과                            |
+| ------------------------------------ | -------------------------------------------------- | ------------------------------- |
+| `memo()`                             | Button, Skeleton, LineChart, CpiChart              | 불필요한 리렌더링 방지          |
+| `useMemo`                            | CpiChart (sortedYears, chartData, lines, unitName) | 비용 큰 계산 캐싱               |
+| `useCallback`                        | CpiChart (getColorIndex)                           | 함수 참조 안정화                |
+| Next.js ISR                          | 모든 fetch 호출 (`revalidate: 30일`)               | 반복 API 호출 차단              |
+| `Promise.all` / `Promise.allSettled` | 배치 페이지네이션, itemCode별 통계 조회            | 병렬 처리로 지연 최소화         |
+| Suspense 스트리밍                    | CPI/PPI 동적 페이지                                | 첫 바이트까지의 시간(TTFB) 단축 |
+| 서버 컴포넌트                        | 대부분의 컴포넌트                                  | JS 번들 크기 감소               |
 
 ---
 
@@ -507,7 +509,7 @@ isOperational: boolean  // 예상된 에러 vs 버그 구분
 
 ```typescript
 // 현재 코드 (fetchPpiStatistics.ts line 16)
-const statCode = CODE_PPI_BUYING_2021_06;  // '901Y093' 고정
+const statCode = CODE_PPI_BUYING_2021_06; // '901Y093' 고정
 ```
 
 `/ppi/901Y094`(전세), `/ppi/901Y095`(월세) 등 어느 PPI 페이지를 방문하더라도 항상 매매가격지수(`901Y093`) 데이터를 조회한다. `PpiDynamicSection`이 `statCode`를 받지 않기 때문에 발생하는 구조적 문제이다.
@@ -544,24 +546,27 @@ PPI 동적 페이지의 API 호출 구조상 섹션 수 × (itemCode 수 × 페�
 ## 13. 설정 파일 요약
 
 ### `next.config.ts`
+
 ```typescript
-const nextConfig: NextConfig = {};  // 커스텀 설정 없음
+const nextConfig: NextConfig = {}; // 커스텀 설정 없음
 ```
 
 ### `tsconfig.json` 핵심 설정
+
 ```json
 {
-  "strict": true,           // 엄격 타입 검사
-  "paths": { "@/*": ["./src/*"] },  // 경로 별칭
-  "target": "ES2017",
-  "moduleResolution": "bundler"
+	"strict": true, // 엄격 타입 검사
+	"paths": { "@/*": ["./src/*"] }, // 경로 별칭
+	"target": "ES2017",
+	"moduleResolution": "bundler"
 }
 ```
 
 ### 환경 변수 (`.env`)
+
 ```
-NEXT_PUBLIC_BOK_BASE_URL=https://ecos.bok.or.kr/api
-NEXT_PUBLIC_BOK_API_KEY=4LOJGFSWCZ85A9JDTPJB
+NEXT_PUBLIC_BOK_BASE_URL
+NEXT_PUBLIC_BOK_API_KEY
 ```
 
 ---
@@ -602,4 +607,4 @@ lib/errors/ ← 모든 lib/* 파일에서 공통 사용
 
 ---
 
-*이 보고서는 2026-03-20 기준 코드베이스 전체를 분석한 결과이며, 이후 코드 변경 시 내용이 달라질 수 있다.*
+_이 보고서는 2026-03-20 기준 코드베이스 전체를 분석한 결과이며, 이후 코드 변경 시 내용이 달라질 수 있다._
