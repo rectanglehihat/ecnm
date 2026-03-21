@@ -16,7 +16,8 @@ const fetchPpiStatistics = async (
 	const statCode = CODE_PPI_BUYING_2021_06;
 	const cycle = 'M';
 	const startTime = '195001';
-	const endTime = '202512';
+	const now = new Date();
+	const endTime = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}`;
 
 	if (!apiKey || !baseUrl) {
 		throw new DataError('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.', {
