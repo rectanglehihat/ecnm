@@ -1,5 +1,3 @@
-import { CODE_PPI_BUYING_2021_06 } from '@/const/BOK_CODE';
-import { StatisticSearchResponse } from '@/lib/cpi/fetchCpiStatistics';
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
 export interface PpiStatisticTableListType {
@@ -9,6 +7,13 @@ export interface PpiStatisticTableListType {
 	CYCLE: string;
 	SRCH_YN: string;
 	ORG_NAME: string;
+}
+
+interface StatisticTableListResponse {
+	StatisticTableList: {
+		list_total_count: number;
+		row: PpiStatisticTableListType[];
+	};
 }
 
 /**
@@ -42,10 +47,10 @@ const fetchPpiStatisticTableList = async (itemCode: string): Promise<PpiStatisti
 		throw error;
 	}
 
-	const data = (await res.json()) as StatisticSearchResponse;
+	const data = (await res.json()) as StatisticTableListResponse;
 
 	let result: PpiStatisticTableListType | null = null;
-	const rows = (data as any)?.StatisticTableList?.row as PpiStatisticTableListType[] | undefined;
+	const rows = data?.StatisticTableList?.row;
 
 	if (Array.isArray(rows)) {
 		const matched = rows.find((row) => row.STAT_CODE === itemCode);
