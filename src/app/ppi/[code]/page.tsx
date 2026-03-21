@@ -2,35 +2,39 @@ import ChartSkeleton from '@/components/charts/ChartSkeleton';
 import PpiDynamicSection from '@/components/ppi/PpiDynamicSection';
 import { handleError } from '@/lib/errors';
 import { fetchPpiItemCodes } from '@/lib/ppi/fetchPpiItemCodes';
+import { fetchPpiStatisticTableList } from '@/lib/ppi/fetchPpiStatisticTableList';
 import { Suspense } from 'react';
 
 interface PageProps {
 	params: Promise<{ code: string }>;
-	searchParams: Promise<{ code?: string; name?: string }>;
 }
 
-export default async function Page({ params, searchParams }: PageProps) {
+export default async function Page({ params }: PageProps) {
 	const { code } = await params;
-	let hierarchy;
 
-	try {
-		hierarchy = await fetchPpiItemCodes(code);
-	} catch (error) {
-		// 에러가 발생하면 Next.js의 error.tsx로 전파
-		throw handleError(error, 'DynamicPpiPage');
+	const [hierarchy, tableInfo] = await Promise.allSettled([
+		fetchPpiItemCodes(code),
+		fetchPpiStatisticTableList(code),
+	]);
+
+	if (hierarchy.status === 'rejected') {
+		throw handleError(hierarchy.reason, 'DynamicPpiPage');
 	}
 
-	if (!hierarchy) {
+	if (!hierarchy.value) {
 		return <div className="text-red-500">❌ 데이터 조회 실패</div>;
 	}
 
-	const queryParams = await searchParams;
+	const pageTitle =
+		tableInfo.status === 'fulfilled' && tableInfo.value?.STAT_NAME
+			? tableInfo.value.STAT_NAME
+			: code;
 
 	return (
 		<main className="space-y-6">
-			<h1 className="text-xl font-bold sm:text-2xl">{queryParams.name}</h1>
+			<h1 className="text-xl font-bold sm:text-2xl">{pageTitle}</h1>
 
-			{hierarchy?.map((childItem) => {
+			{hierarchy.value.map((childItem) => {
 				const childItemCodes = childItem.children
 					? Object.values(childItem.children).map((item) => item.ITEM_CODE)
 					: [];
