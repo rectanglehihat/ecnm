@@ -1,3 +1,4 @@
+import { BOK_BASE_URL } from '@/const/BOK_CODE';
 import { ApiError, DataError, NetworkError, handleError } from '@/lib/errors';
 
 export interface StatisticItem {
@@ -35,14 +36,14 @@ export const fetchCpiItemCodes = async (
 	rootItemCode?: string,
 ): Promise<CpiItemHierarchy | CpiItemHierarchy[] | null> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
-	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
+	const baseUrl = BOK_BASE_URL;
 
-	if (!apiKey || !baseUrl) {
-		throw new DataError('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.', {
+	if (!apiKey) {
+		throw new DataError('한국은행 Open API 키가 설정되지 않았습니다.', {
 			location: 'fetchCpiItemCodes',
 			userMessage: 'API 설정이 올바르지 않습니다. 관리자에게 문의하세요.',
 			retryable: false,
-			metadata: { missingKey: !apiKey, missingUrl: !baseUrl },
+			metadata: { missingKey: !apiKey },
 		});
 	}
 

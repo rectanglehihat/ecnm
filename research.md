@@ -203,11 +203,6 @@ CPI는 `P_ITEM_CODE`를 활용한 재귀 트리이고, PPI는 ITEM_CODE의 접�
 
 ### 환경 변수
 
-```
-NEXT_PUBLIC_BOK_BASE_URL=https://ecos.bok.or.kr/api
-NEXT_PUBLIC_BOK_API_KEY=4LOJGFSWCZ85A9JDTPJB
-```
-
 `NEXT_PUBLIC_` 접두어를 사용하므로 클라이언트 사이드에도 노출된다. 민감도가 낮은 공공 API 키이지만 향후 서버 전용 환경 변수(`BOK_API_KEY`)로 이전하는 것을 고려할 수 있다.
 
 ### 통계 코드 상수 (`BOK_CODE.ts`)
@@ -565,9 +560,10 @@ const nextConfig: NextConfig = {}; // 커스텀 설정 없음
 ### 환경 변수 (`.env`)
 
 ```
-NEXT_PUBLIC_BOK_BASE_URL
 NEXT_PUBLIC_BOK_API_KEY
 ```
+
+`BOK_BASE_URL`은 `src/const/BOK_CODE.ts`의 상수로 관리합니다.
 
 ---
 
