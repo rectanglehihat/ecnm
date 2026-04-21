@@ -1,4 +1,4 @@
-import { CODE_CPI } from '@/const/BOK_CODE';
+import { BOK_BASE_URL, CODE_CPI } from '@/const/BOK_CODE';
 import { ApiError, DataError, handleError } from '@/lib/errors';
 
 export interface StatisticSearchItem {
@@ -31,19 +31,19 @@ export interface StatisticSearchResponse {
  */
 const fetchCpiStatistics = async (itemCodes: string[] = ['A01101']): Promise<Record<string, StatisticSearchItem[]>> => {
 	const apiKey = process.env.NEXT_PUBLIC_BOK_API_KEY;
-	const baseUrl = process.env.NEXT_PUBLIC_BOK_BASE_URL;
+	const baseUrl = BOK_BASE_URL;
 
 	const statCode = CODE_CPI;
 	const cycle = 'A';
 	const startTime = '1950';
 	const endTime = '2024';
 
-	if (!apiKey || !baseUrl) {
-		throw new DataError('한국은행 Open API 키 또는 기본 URL이 설정되지 않았습니다.', {
+	if (!apiKey) {
+		throw new DataError('한국은행 Open API 키가 설정되지 않았습니다.', {
 			location: 'fetchCpiStatistics',
 			userMessage: 'API 설정이 올바르지 않습니다. 관리자에게 문의하세요.',
 			retryable: false,
-			metadata: { missingKey: !apiKey, missingUrl: !baseUrl },
+			metadata: { missingKey: !apiKey },
 		});
 	}
 

@@ -1,4 +1,5 @@
 export const CODE_CPI = '901Y009';
+export const BOK_BASE_URL = 'https://ecos.bok.or.kr/api';
 export const CODE_PPI_BUYING_2021_06 = '901Y093';
 export const CODE_PPI_BUYING_2025_03 = '901Y113';
 export const CODE_PPI_JEONSE_2021_06 = '901Y094';
